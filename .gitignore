@@ -34,3 +34,6 @@ build/Release
 
 # Output of 'npm pack'
 *.tgz
+
+# lock
+package-lock.json
