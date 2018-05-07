@@ -33,38 +33,39 @@
                 <table class="table table-sm table-hover">
                     <thead class="thead-default">
                     <tr class="add-category-row">
-                        <th style="width: 30px;">
+                        <th style="width: 5px;">
                             <button class="btn-view-fund btn btn-default btn-xs  pull-left" type="button"
                                     data-toggle="modal" data-target="#newTimerModel">
                                 <span class="glyphicon glyphicon-plus green" aria-hidden="true"></span>
                             </button>
                         </th>
-                        <th style="width: 30px;"></th>
-                        <th style="width: 30px;"></th>
-                        <th style="width: 30px;"></th>
+                        <th style="width: 5px;"></th>
+                        <th style="width: 5px;"></th>
+                        <th style="width: 5px;"></th>
                         <th>Add New Timer</th>
                     </tr>
                     </thead>
 
                     <tbody>
                     <tr>
-                        <td style="width: 30px;">
-                            <button class="btn-view-fund btn btn-default btn-xs pull-left" type="button">
+                        <td style="width: 5px;">
+                            <button class="btn-view-fund btn btn-default btn-xs pull-left" type="button"
+                                    data-toggle="modal" data-target="#modifyTimerModel">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                             </button>
                         </td>
-                        <td style="width: 30px;">
+                        <td style="width: 5px;">
                             <button class="btn-view-fund btn btn-default btn-xs pull-left" type="button"
                                     data-toggle="modal" data-target="#deleteTimerModel">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </button>
                         </td>
-                        <td style="width: 30px;">
+                        <td style="width: 5px;">
                             <button class="btn-view-fund btn btn-default btn-xs pull-left" type="button">
                                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                             </button>
                         </td>
-                        <td style="width: 30px;">
+                        <td style="width: 5px;">
                             <button class="btn-view-fund btn btn-default btn-xs pull-left" type="button">
                                 <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
                             </button>
@@ -72,22 +73,22 @@
                         <td style="text-align: left;">한글 단어 공부: 140:50 (20"/d)</td>
                     </tr>
                     <tr>
-                        <td style="width: 30px;">
+                        <td style="width: 5px;">
                             <button class="btn-view-fund btn btn-default btn-xs pull-left" type="button">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                             </button>
                         </td>
-                        <td style="width: 30px;">
+                        <td style="width: 5px;">
                             <button class="btn-view-fund btn btn-default btn-xs pull-left" type="button">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </button>
                         </td>
-                        <td style="width: 30px;">
+                        <td style="width: 5px;">
                             <button class="btn-view-fund btn btn-default btn-xs pull-left" type="button">
                                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                             </button>
                         </td>
-                        <td style="width: 30px;">
+                        <td style="width: 5px;">
                             <button class="btn-view-fund btn btn-default btn-xs pull-left" type="button">
                                 <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
                             </button>
@@ -95,22 +96,22 @@
                         <td style="text-align: left;">영어 단어 공부: 140:50 (20"/d)</td>
                     </tr>
                     <tr>
-                        <td style="width: 30px;">
+                        <td style="width: 5px;">
                             <button class="btn-view-fund btn btn-default btn-xs pull-left" type="button">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                             </button>
                         </td>
-                        <td style="width: 30px;">
+                        <td style="width: 5px;">
                             <button class="btn-view-fund btn btn-default btn-xs pull-left" type="button">
                                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                             </button>
                         </td>
-                        <td style="width: 30px;">
+                        <td style="width: 5px;">
                             <button class="btn-view-fund btn btn-default btn-xs pull-left" type="button">
                                 <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
                             </button>
                         </td>
-                        <td style="width: 30px;">
+                        <td style="width: 5px;">
                             <button class="btn-view-fund btn btn-default btn-xs pull-left" type="button">
                                 <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
                             </button>
@@ -127,7 +128,7 @@
 
 <!-- add model -->
 <div class="modal fade" id="newTimerModel" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
+     aria-labelledby="addTimerLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <!-- Modal Header -->
@@ -158,8 +159,8 @@
                 </p>
                 <form role="form">
                     <div class="form-group">
-                        <label for="timerDescription">Timer Description</label>
-                        <input type="text" class="form-control" id="timerDescription">
+                        <label for="newTimerDescription">Timer Description</label>
+                        <input type="text" class="form-control" id="newTimerDescription">
                     </div>
                     <div class="form-group">
                         <p>Interval per day:</p>
@@ -196,7 +197,7 @@
 
 <!--delete model-->
 <div class="modal fade" id="deleteTimerModel" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
+     aria-labelledby="deleteTimerLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <!-- Modal Header -->
@@ -225,6 +226,53 @@
     </div>
 </div>
 
+<!--modify timer-->
+<div class="modal fade" id="modifyTimerModel" tabindex="-1" role="dialog"
+     aria-labelledby="modifyTimerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="modifyTimerLabel">
+                    Modify Timer
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <p>
+                    Change the name for timer and set the length of time you want to repeat per day in hours, minutes, and
+                    seconds.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <label for="modifyTimerDescription">Timer Description</label>
+                        <input type="text" class="form-control" id="modifyTimerDescription">
+                    </div>
+                    <div class="form-group">
+                        <p>Interval per day:</p>
+                        <label for="newTimerHours">Hours</label>
+                        <input type="number" placeholder="00" maxlength="2" class="form-control" id="modifyTimerHours">
+                        <label for="newTimerMinutes">Minutes</label>
+                        <input type="number" placeholder="00" maxlength="2" class="form-control" id="modifyTimerMinutes">
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
