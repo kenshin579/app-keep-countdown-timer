@@ -1,8 +1,18 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+/*.stop button {*/
+/*margin-left: 100px;*/
+/*}*/
+
+/*https://stackoverflow.com/questions/16387400/getting-the-right-font-size-on-every-mobile-device/16387418?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa*/
+/* ipad */
+@media only screen and (max-width: 768px) {
+    .timer-text-large {
+        font-size: 150px !important;
+    }
 }
 
-a {
-  color: #00B7FF;
+/*phone*/
+@media only screen and (max-width: 320px) {
+    .timer-text-large {
+        font-size: 100px !important;
+    }
 }
