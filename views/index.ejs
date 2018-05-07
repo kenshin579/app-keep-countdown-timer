@@ -1,11 +1,207 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<html lang="en">
+<head>
+    <title>Keep Countdown Timer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../public/stylesheets/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Keep Countdown Timer</a>
+        </div>
+    </div>
+</nav>
+
+<div class="jumbotron text-center">
+    <h1 class="timer-text-large">25 : 14</h1>
+    <button type="button" class="btn btn-default btn-lg">Start</button>
+    <button type="button" class="btn btn-default btn-lg">Stop</button>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                    <thead class="thead-default">
+                    <tr class="add-category-row">
+                        <th style="width: 5px;">
+                            <button class="btn-view-fund btn btn-default btn-xs  pull-left" type="button"
+                                    data-toggle="modal" data-target="#newTimerModel">
+                                <span class="glyphicon glyphicon-plus green" aria-hidden="true"></span>
+                            </button>
+                        </th>
+                        <th style="width: 5px;"></th>
+                        <th style="width: 5px;"></th>
+                        <th style="width: 5px;"></th>
+                        <th>Add New Timer</th>
+                    </tr>
+                    </thead>
+
+                    <%- include timerlist.ejs%>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- add model -->
+<div class="modal fade" id="newTimerModel" tabindex="-1" role="dialog"
+     aria-labelledby="addTimerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="addTimerLabel">
+                    Add New Timer
+                </h4>
+            </div>
+
+            <!--<div class="modal-body">-->
+            <!--<p>Add a name for each period and the length of time you want that period to last in hours, minutes, and seconds.</p>-->
+            <!--<div id="uxMarinaraSequence" data-bind="foreach:$data, numbersOnly:true"></div>-->
+            <!--<div class="intervalsequence">-->
+            <!--<input type="text" placeholder="Period Name" class="form-control intervalsequence-name" id="uxNewMarinaraTimerType"><input type="text" placeholder="00" maxlength="2" id="uxNewMarinaraHours" class="form-control intervalsequence-hours js-numbersOnly"><span class="label">H</span><input type="text" placeholder="00" maxlength="2" id="uxNewMarinaraMinutes" class="form-control intervalsequence-minutes js-numbersOnly"><span class="label">M</span><input type="text" placeholder="00" maxlength="2" id="uxNewMarinaraSeconds" class="form-control intervalsequence-seconds js-numbersOnly"><span class="label">S</span><button type="button" class="btn btn-default btn-icon" id="uxMarinaraAddInterval"><i class="icon-plus"></i></button>-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <p>
+                    Add a name for timer and set the length of time you want to repeat per day in hours, minutes, and
+                    seconds.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <label for="newTimerDescription">Timer Description</label>
+                        <input type="text" class="form-control" id="newTimerDescription">
+                    </div>
+                    <div class="form-group">
+                        <p>Interval per day:</p>
+                        <label for="newTimerHours">Hours</label>
+                        <input type="number" placeholder="00" maxlength="2" class="form-control" id="newTimerHours">
+                        <label for="newTimerMinutes">Minutes</label>
+                        <input type="number" placeholder="00" maxlength="2" class="form-control" id="newTimerMinutes">
+                    </div>
+                    <!--<div class="form-group">-->
+                    <!--<div class="intervalsequence">-->
+                    <!--<label>Interval per day:</label>-->
+                    <!--<input type="text" placeholder="00" maxlength="2" class="form-control" id="newTimerHours">-->
+                    <!--<span class="u-size-xs">H</span>-->
+                    <!--<input type="text" placeholder="00" maxlength="2" class="form-control" id="newTimerMinutes">-->
+                    <!--<span class="u-size-xs">M</span>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+                <!--<button type="button" class="btn btn-primary">-->
+                <!--Save changes-->
+                <!--</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--delete model-->
+<div class="modal fade" id="deleteTimerModel" tabindex="-1" role="dialog"
+     aria-labelledby="deleteTimerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="deleteTimerLabel">
+                    Delete Timer
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <p>You are about to delete this timer, this procedure is irreversible.</p>
+                <p>Do you want to proceed?</p>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-danger btn-ok">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--modify timer-->
+<div class="modal fade" id="modifyTimerModel" tabindex="-1" role="dialog"
+     aria-labelledby="modifyTimerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="modifyTimerLabel">
+                    Modify Timer
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <p>
+                    Change the name for timer and set the length of time you want to repeat per day in hours, minutes,
+                    and
+                    seconds.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <label for="modifyTimerDescription">Timer Description</label>
+                        <input type="text" class="form-control" id="modifyTimerDescription">
+                    </div>
+                    <div class="form-group">
+                        <p>Interval per day:</p>
+                        <label for="newTimerHours">Hours</label>
+                        <input type="number" placeholder="00" maxlength="2" class="form-control" id="modifyTimerHours">
+                        <label for="newTimerMinutes">Minutes</label>
+                        <input type="number" placeholder="00" maxlength="2" class="form-control"
+                               id="modifyTimerMinutes">
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
 </html>

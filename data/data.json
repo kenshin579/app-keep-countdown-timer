@@ -1,0 +1,38 @@
+[
+  {
+    "timer_description": "한글 단어 공부",
+    "timer_interval": {
+      "hours": 0,
+      "minutes": 30
+    },
+    "timer_total": {
+      "hours": 2,
+      "minutes": 30
+    },
+    "start_date": "2017-04-01"
+  },
+  {
+    "timer_description": "영어 단어 공부",
+    "timer_interval": {
+      "hours": 0,
+      "minutes": 30
+    },
+    "timer_total": {
+      "hours": 2,
+      "minutes": 30
+    },
+    "start_date": "2017-04-01"
+  },
+  {
+    "timer_description": "운동",
+    "timer_interval": {
+      "hours": 0,
+      "minutes": 30
+    },
+    "timer_total": {
+      "hours": 2,
+      "minutes": 30
+    },
+    "start_date": "2017-04-01"
+  }
+]
