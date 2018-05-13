@@ -11,6 +11,7 @@ router.get('/timers', function (req, res, next) {
 });
 
 router.post('/timers', function (req, res, next) {
+    logger.info("req", req);
     var newTimer = new Timer();
 
     newTimer.timer_description = req.body.timer_description;
