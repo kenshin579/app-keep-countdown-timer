@@ -1,10 +1,18 @@
+// import * as JTimer from 'JTimer';
+
 $(document).ready(function () {
     console.log("ready!");
     $("#timeTable tr:has(td)").click(function (e) {
-        var clickedCell = $(e.target).closest("td");
-        var REGREX_EXTRACT_TIMER = /.* ([0-9]+:[0-9]+).*/g;
-        var matchTimer = REGREX_EXTRACT_TIMER.exec(clickedCell.text());
+        const clickedCell = $(e.target).closest("td");
+        const REGREX_EXTRACT_TIMER = /.* ([0-9]+:[0-9]+).*/g;
+        const matchTimer = REGREX_EXTRACT_TIMER.exec(clickedCell.text());
         $("#main-timer").text(matchTimer[0]);
+    });
+
+    $("#main-timer-start").click(function (e) {
+        var myModuleInstance = new JTimer();
+        myModuleInstance.hello(); // 'hello!'
+        myModuleInstance.goodbye(); // 'goodbye!'
     });
 
     $("#btnSubmitModal").click(function (event) {
@@ -26,7 +34,5 @@ $(document).ready(function () {
         });
 
         $('#newTimerModel').modal('hide');
-
-
     });
 });

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        span {
+            border: 1px solid gray;
+            padding: 5px;
+            border-radius: 4px;
+            background: #fff;
+        }
+
+        .timer {
+            padding: 2px;
+            margin: 10px;
+        }
+
+        .main {
+            background: #efefef;
+            padding: 5px;
+            width: 200px;
+            text-align: center;
+        }
+
+        .btn {
+            -webkit-border-radius: 6;
+            -moz-border-radius: 6;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 14px;
+            background: #2980b9;
+            text-decoration: none;
+            transition: 0.4s;
+        }
+
+        .btn:hover {
+            background: #3cb0fd;
+            text-decoration: none;
+            transition: 0.4s;
+        }
+
+        .warn {
+            background: yellow;
+        }
+
+        .error {
+            background: red;
+        }
+    </style>
+    <script>
+        function timer() {
+            var time = {
+                sec: 00,
+                min: 00,
+                hr: 00
+            };
+            var finalLimit = null,
+                warnLimit = null,
+                errorLimit = null;
+            var max = 59;
+            var interval = null;
+
+            function init(_hr, _min, _sec) {
+                time["hr"] = _hr ? _hr : 0;
+                time["min"] = _min ? _min : 0;
+                time["sec"] = _sec ? _sec : 0;
+                printAll();
+            }
+
+            function setLimit(fLimit, wLimit, eLimit) {
+                finalLimit = fLimit;
+                warnLimit = wLimit;
+                errorLimit = eLimit;
+            }
+
+            function printAll() {
+                print("sec");
+                print("min");
+                print("hr");
+            }
+
+            function update(str) {
+                time[str]++;
+                time[str] = time[str] % 60;
+                if (time[str] == 0) {
+                    str == "sec" ? update("min") : update("hr");
+                }
+                print(str);
+            }
+
+            function print(str) {
+                var _time = time[str].toString().length == 1 ? "0" + time[str] : time[str];
+                document.getElementById("lbl" + str).innerHTML = _time;
+            }
+
+            function validateTimer() {
+                var className = "";
+                var secs = time.sec + (time.min * 60) + (time.hr * 60 * 60);
+                if (secs >= finalLimit) {
+                    stopTimer();
+                } else if (secs >= errorLimit) {
+                    className = "error";
+                } else if (secs >= warnLimit) {
+                    className = "warn";
+                }
+                var element = document.getElementsByTagName("span");
+                document.getElementById("lblsec").className = className;
+            }
+
+            function startTimer() {
+                init();
+                if (interval) stopTimer();
+                interval = setInterval(function () {
+                    update("sec");
+                    validateTimer();
+                }, 1000);
+            }
+
+            function stopTimer() {
+                window.clearInterval(interval);
+            }
+
+            function resetInterval() {
+                stopTimer();
+                time["sec"] = time["min"] = time["hr"] = 0;
+                printAll();
+                startTimer();
+            }
+
+            return {
+                'start': startTimer,
+                'stop': stopTimer,
+                'reset': resetInterval,
+                'init': init,
+                'setLimit': setLimit
+            }
+        };
+
+        var time = new timer();
+
+        function initTimer() {
+            time.init(0, 0, 0);
+        }
+
+        function startTimer() {
+            time.start();
+            time.setLimit(10, 5, 8);
+        }
+
+        function endTimer() {
+            time.stop();
+        }
+
+        function resetTimer() {
+            time.reset();
+        }
+    </script>
+</head>
+<body>
+<div class="main">
+    <div class="timer">
+        <span id="lblhr">00</span>
+        : <span id="lblmin">00</span>
+        : <span id="lblsec">00</span>
+
+    </div>
+    <button class="btn" onclick="startTimer()">Start</button>
+    <button class="btn" onclick="endTimer()">Stop</button>
+    <button class="btn" onclick="resetTimer()">Reset</button>
+</div>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Keep Countdown Timer</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script data-main="js/main" src="js/lib/requirejs/require.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">Keep Countdown Timer</a>
+        </div>
+    </div>
+</nav>
+
+<div class="jumbotron text-center">
+    <h1 id="main-timer" class="timer-text-large">00 : 00</h1>
+    <button id="main-timer-start" type="button" class="btn btn-default btn-lg">Start</button>
+    <button id="main-timer-stop" type="button" class="btn btn-default btn-lg">Stop</button>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="table-responsive">
+                <table id="timeTable" class="table table-sm table-hover">
+                    <thead class="thead-default">
+                    <tr class="add-category-row">
+                        <th style="width: 5px;">
+                            <button class="btn-view-fund btn btn-default btn-xs pull-left" type="button"
+                                    data-toggle="modal" data-target="#newTimerModel">
+                                <span class="glyphicon glyphicon-plus green" aria-hidden="true"></span>
+                            </button>
+                        </th>
+                        <th style="width: 5px;"></th>
+                        <th style="width: 5px;"></th>
+                        <th style="width: 5px;"></th>
+                        <th>Add New Timer</th>
+                    </tr>
+                    </thead>
+                    <div id="timer-list">
+                        <%- include listtimer.ejs %>
+                    </div>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- alert windows -->
+<div class="message-top alert alert-info" id="alert-success">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong><span class="message"></span>
+</div>
+
+<div class="message-top alert alert-danger" id="alert-fail">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Fail! </strong><span class="message"></span>
+</div>
+
+<!-- add model -->
+<div id="newTimerModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addTimerLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="addTimerLabel">
+                    Add New Timer
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <p>
+                    Add a name for timer and set the length of time you want to repeat per day in hours, minutes, and
+                    seconds.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <label for="newTimerDescription">Timer Description</label>
+                        <input type="text" class="form-control" id="newTimerDescription">
+                    </div>
+                    <div class="form-group">
+                        <p>Interval per day:</p>
+                        <label for="newTimerHours">Hours</label>
+                        <input type="number" placeholder="00" maxlength="2" class="form-control" id="newTimerHours">
+                        <label for="newTimerMinutes">Minutes</label>
+                        <input type="number" placeholder="00" maxlength="2" class="form-control" id="newTimerMinutes">
+                    </div>
+                </form>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+                <button type="submit" class="btn btn-success" data-dismiss="modal" id="btnSubmitModal">
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--delete model-->
+<div class="modal fade" id="deleteTimerModel" tabindex="-1" role="dialog"
+     aria-labelledby="deleteTimerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="deleteTimerLabel">
+                    Delete Timer
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <p>You are about to delete this timer, this procedure is irreversible.</p>
+                <p>Do you want to proceed?</p>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-danger btn-ok">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--modify timer-->
+<div class="modal fade" id="modifyTimerModel" tabindex="-1" role="dialog"
+     aria-labelledby="modifyTimerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="modifyTimerLabel">
+                    Modify Timer
+                </h4>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <p>
+                    Change the name for timer and set the length of time you want to repeat per day in hours, minutes,
+                    and
+                    seconds.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <label for="modifyTimerDescription">Timer Description</label>
+                        <input type="text" class="form-control" id="modifyTimerDescription">
+                    </div>
+                    <div class="form-group">
+                        <p>Interval per day:</p>
+                        <label for="newTimerHours">Hours</label>
+                        <input type="number" placeholder="00" maxlength="2" class="form-control" id="modifyTimerHours">
+                        <label for="newTimerMinutes">Minutes</label>
+                        <input type="number" placeholder="00" maxlength="2" class="form-control"
+                               id="modifyTimerMinutes">
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

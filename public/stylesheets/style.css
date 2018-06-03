@@ -16,3 +16,14 @@
         font-size: 100px !important;
     }
 }
+
+.message-top {
+    position: fixed;
+    top: 80px;
+    left: 20%;
+    width: 50%;
+}
+
+.alert {
+    display: none;
+}
