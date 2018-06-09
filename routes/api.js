@@ -38,4 +38,23 @@ router.post('/add', function (req, res, next) {
     });
 });
 
+
+
+//delete timer
+router.delete('/:timer_name', function (req, res, next) {
+    logger.info("req", req);
+
+    // addTimer.timer_description = req.body.newTimerDescription;
+
+    // addTimer.save(function (err) {
+    //     if (err) {
+    //         logger.error(err);
+    //         res.json({result: 0});
+    //         return;
+    //     }
+    //
+    //     res.json({result: 1});
+    // });
+});
+
 module.exports = router;

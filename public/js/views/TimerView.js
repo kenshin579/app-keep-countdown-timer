@@ -34,6 +34,10 @@ define([
 
             this.$timeTable = $("#timeTable tr:has(td)");
             this.$btnSubmitModel = $("#btnSubmitModal");
+
+            this.$addModal = $("#newTimerModel");
+            this.$deleteModal = $("#deleteTimerModel");
+            this.$modifyTimerModel = $("#modifyTimerModel");
             return this;
         },
 
@@ -47,6 +51,7 @@ define([
             this.addTimerHandler = this.addTimer.bind(this);
             this.deleteTimerHandler = this.deleteTimer.bind(this);
             this.listTimersHandler = this.listTimers.bind(this);
+
             return this;
         },
 
@@ -62,7 +67,15 @@ define([
             this.model.deleteTimerEvent.attach(this.deleteTimerHandler);
             this.model.listTimersEvent.attach(this.listTimersHandler);
 
+            this.$addModal.on("hidden.bs.modal", this._resetModal);
+            this.$deleteModal.on("hidden.bs.modal", this._resetModal);
+            this.$modifyTimerModel.on("hidden.bs.modal", this._resetModal);
             return this;
+        },
+
+        _resetModal: function() {
+            var $modal = $(this);
+            $modal.find(".modal-body input").val("");
         },
 
         _showMessage: function (/*String*/ code, /*String*/ message) {
