@@ -12,7 +12,7 @@ var dbConfig = require('./config/database.config.js');
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'public/templates'));
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 var isProduction = process.env.NODE_ENV === 'production';

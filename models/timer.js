@@ -11,7 +11,10 @@ var timerSchema = new Schema({
     },
     timer_total: {
         hours: {type: Number},
-        minutes: {type: Number},
+        minutes: {type: Number}
+    },
+    timer_status: {
+        type: String
     },
     start_date: {
         type: Date,

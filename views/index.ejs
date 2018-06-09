@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
-    <script data-main="javascripts/main" src="/javascripts/lib/requirejs/require.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script data-main="js/main" src="js/lib/requirejs/require.js"></script>
 </head>
 <body>
 
@@ -33,7 +34,7 @@
                     <thead class="thead-default">
                     <tr class="add-category-row">
                         <th style="width: 5px;">
-                            <button class="btn-view-fund btn btn-default btn-xs  pull-left" type="button"
+                            <button class="btn-view-fund btn btn-default btn-xs pull-left" type="button"
                                     data-toggle="modal" data-target="#newTimerModel">
                                 <span class="glyphicon glyphicon-plus green" aria-hidden="true"></span>
                             </button>
@@ -44,16 +45,25 @@
                         <th>Add New Timer</th>
                     </tr>
                     </thead>
-                    <%- include listtimer.ejs %>
                 </table>
-
             </div>
         </div>
     </div>
 </div>
 
+<!-- alert windows -->
+<div class="message-top alert alert-info" id="alert-success">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Success! </strong><span class="message"></span>
+</div>
+
+<div class="message-top alert alert-danger" id="alert-fail">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong>Fail! </strong><span class="message"></span>
+</div>
+
 <!-- add model -->
-<div class="modal fade" id="newTimerModel" tabindex="-1" role="dialog" aria-labelledby="addTimerLabel"
+<div id="newTimerModel" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addTimerLabel"
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -82,9 +92,9 @@
                     <div class="form-group">
                         <p>Interval per day:</p>
                         <label for="newTimerHours">Hours</label>
-                        <input type="number" placeholder="00" maxlength="2" class="form-control" id="newTimerHours">
+                        <input type="number" placeholder="00" min="0" max="12" maxlength="2" class="form-control" id="newTimerHours">
                         <label for="newTimerMinutes">Minutes</label>
-                        <input type="number" placeholder="00" maxlength="2" class="form-control" id="newTimerMinutes">
+                        <input type="number" placeholder="00" min="0" max="59" maxlength="2" class="form-control" id="newTimerMinutes">
                     </div>
                 </form>
             </div>
@@ -94,7 +104,7 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">
                     Close
                 </button>
-                <button type="submit" class="btn btn-success" id="btnSubmitModal">
+                <button type="submit" class="btn btn-success" data-dismiss="modal" id="btnSubmitModal">
                     Save Changes
                 </button>
             </div>
@@ -164,9 +174,9 @@
                     <div class="form-group">
                         <p>Interval per day:</p>
                         <label for="newTimerHours">Hours</label>
-                        <input type="number" placeholder="00" maxlength="2" class="form-control" id="modifyTimerHours">
+                        <input type="number" placeholder="00" min="0" max="12" maxlength="2" class="form-control" id="modifyTimerHours">
                         <label for="newTimerMinutes">Minutes</label>
-                        <input type="number" placeholder="00" maxlength="2" class="form-control"
+                        <input type="number" placeholder="00" min="0" max="59" maxlength="2" class="form-control"
                                id="modifyTimerMinutes">
                     </div>
                     <button type="submit" class="btn btn-default">Submit</button>

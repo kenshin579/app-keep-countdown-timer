@@ -7,14 +7,11 @@ var Timer = mongoose.model('timer');
 
 // return a list of timers
 router.get('/', function (req, res, next) {
-    Timer.find(function (err, timers) {
-        if (err) return res.status(500).send({error: 'database failure'});
-        res.render('index', {result: timers});
-    });
+    res.render('index');
 });
 
 //create new timer
-router.post('/new', function (req, res, next) {
+router.post('/add', function (req, res, next) {
     logger.info("req", req);
     var newTimer = new Timer();
 
@@ -25,6 +22,8 @@ router.post('/new', function (req, res, next) {
 
     newTimer.timer_total.hours = 0;
     newTimer.timer_total.minutes = 0;
+
+    newTimer.timer_status = "active";
 
     newTimer.start_date = Date.now(moment().format('YYYY-MM-DD'));
 
@@ -37,15 +36,17 @@ router.post('/new', function (req, res, next) {
 
         res.json({result: 1});
     });
+
+    res.redirect('/');
 });
 
 //delete timer
 router.delete('/:timer_name', function (req, res, next) {
     logger.info("req", req);
 
-    // newTimer.timer_description = req.body.newTimerDescription;
+    // addTimer.timer_description = req.body.newTimerDescription;
 
-    // newTimer.save(function (err) {
+    // addTimer.save(function (err) {
     //     if (err) {
     //         logger.error(err);
     //         res.json({result: 0});

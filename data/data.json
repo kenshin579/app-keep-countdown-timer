@@ -9,6 +9,7 @@
       "hours": 2,
       "minutes": 30
     },
+    "timer_status": "active",
     "start_date": "2017-04-01"
   },
   {
@@ -21,6 +22,7 @@
       "hours": 2,
       "minutes": 30
     },
+    "timer_status": "active",
     "start_date": "2017-04-01"
   },
   {
@@ -33,6 +35,7 @@
       "hours": 2,
       "minutes": 30
     },
+    "timer_status": "active",
     "start_date": "2017-04-01"
   }
 ]

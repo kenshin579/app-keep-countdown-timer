@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="../js/lib/handlebars/handlebars-v4.0.11.js"></script>
+    <!--<script id="address-template" type="text/x-handlebars-template">-->
+    <!--<p>You can find me in {{city}}. My address is {{number}} {{street}}.</p>-->
+    <!--</script>-->
+</head>
+<body>
+https://tutorialzine.com/2015/01/learn-handlebars-in-10-minutes
+<!--Your new content will be displayed in here-->
+<div class="content-placeholder"></div>
+
+</body>
+<script>
+    $(function () {
+        // Define our data object
+        var context = {
+            "city": "London",
+            "street": "Baker Street",
+            "number": "221B"
+        };
+
+        // Grab the template script
+        // var theTemplateScript = $("#address-template").html();
+        var getTemplateAjax = function (url, data, callback) {
+            var compiledTemplate;
+            $.ajax({
+                url: url,
+                success: function (template) {
+                    compiledTemplate = Handlebars.compile(template);
+                    var htmlTemplate = compiledTemplate(data);
+                    if (callback) {
+                        callback(htmlTemplate);
+                    }
+                }
+            });
+        };
+
+        getTemplateAjax("templates/address-template.hbs", context, function (template) {
+            $('.content-placeholder').html(template);
+        });
+    });
+
+</script>
+</html>
