@@ -39,7 +39,7 @@ define([
 
         addTimer: function (sender, data) {
             console.log("controller add sender:", sender);
-            console.log("controller add args:", data);
+            console.log("controller add data:", data);
 
             Requester.addTimerToDb(data, function (resultFromDB) {
                 if (resultFromDB.result) {

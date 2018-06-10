@@ -2,11 +2,12 @@ define([
     "jquery",
     "underscore",
     "bootstrap",
+    "moment",
     "handlebars",
     "common/Constants",
     "common/Event",
     "utils/CommonUtils"
-], function ($, _, bootstrap, Handlebars, Constants, Event, CommonUtils) {
+], function ($, _, bootstrap, moment, Handlebars, Constants, Event, CommonUtils) {
     "use strict";
 
     var TimerView = function TimerView(model) {
@@ -73,7 +74,7 @@ define([
             return this;
         },
 
-        _resetModal: function() {
+        _resetModal: function () {
             var $modal = $(this);
             $modal.find(".modal-body input").val("");
         },
@@ -114,21 +115,23 @@ define([
             // }
         },
 
-        addTimerButton: function (e) {
+        addTimerButton: function () {
             console.log("view addTimerButton");
 
             this.addTimerEvent.notify({
-                newTimerDescription: $("#newTimerDescription").val(),
-                newTimerHours: $("#newTimerHours").val(),
-                newTimerMinutes: $("#newTimerMinutes").val()
+                timer_description: $("#newTimerDescription").val(),
+                timer_interval: {
+                    hours: $("#newTimerHours").val(),
+                    minutes: $("#newTimerMinutes").val()
+                },
+                timer_total: {
+                    hours: $("#newTimerHours").val(),
+                    minutes: $("#newTimerMinutes").val()
+                },
+                timer_status: "active",
+                start_date: Date.now(moment().format('YYYY-MM-DD'))
             });
-
-            // var self = this;
-            //
-            //
-            // $("#newTimerModel").modal("hide");
         },
-
 
         clickTable: function (e) {
             // e.stopPropagation();
@@ -143,17 +146,34 @@ define([
             console.log("stopCountDownTimer");
         },
 
-        updateTimersList: function () {
-            console.log("view updateTimersList");
-            var timers = this.model.getTimers();
-            CommonUtils.getTemplateAjax("templates/list-template.hbs", timers, function (template) {
-                $("#timeTable").append(template);
-            })
+        updateTimersList: function (data) {
+            console.log("view updateTimersList data", data);
+            console.log("timers", this.model.timers);
+            if (data) {
+                CommonUtils.getTemplate("templates/addtimer-template.hbs", function (hbsTemplate) {
+                    var compiledTemplate = Handlebars.compile(hbsTemplate);
+                    var htmlTemplate = compiledTemplate(data);
+                    $("#timer-list").last().append(htmlTemplate);
+                });
+            } else {
+
+                //todo: nested ajax call 개선하기
+                var self = this;
+                CommonUtils.getTemplate("templates/addtimer-template.hbs", function (hbsAddTemplate) {
+                    CommonUtils.getTemplate("templates/list-template.hbs", function (hbsListTemplate) {
+                        var compiledTemplate = Handlebars.compile(hbsListTemplate);
+                        Handlebars.registerPartial("addtimer", hbsAddTemplate);
+                        var htmlTemplate = compiledTemplate(self.model.getTimers());
+                        $("#timer-list").append(htmlTemplate);
+                    });
+                });
+            }
         },
 
         // Handlers From Event Dispatcher
-        addTimer: function () {
-            this.updateTimersList();
+        addTimer: function (sender, args) {
+            console.log("viewer args", args);
+            this.updateTimersList(args);
         },
 
         deleteTimer: function () {

@@ -17,12 +17,6 @@ https://tutorialzine.com/2015/01/learn-handlebars-in-10-minutes
 </body>
 <script>
     $(function () {
-        // Grab the template script
-        var theTemplateScript = $("#address-template").html();
-
-        // Compile the template
-        var theTemplate = Handlebars.compile(theTemplateScript);
-
         // Define our data object
         var context={
             "city": "London",
@@ -30,6 +24,10 @@ https://tutorialzine.com/2015/01/learn-handlebars-in-10-minutes
             "number": "221B"
         };
 
+        // Grab the template script
+        var theTemplateScript = $("#address-template").html();
+        // Compile the template
+        var theTemplate = Handlebars.compile(theTemplateScript);
         // Pass our data to the template
         var theCompiledHtml = theTemplate(context);
         console.log("theCompiledHtml", theCompiledHtml);

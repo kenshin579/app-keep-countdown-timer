@@ -1,34 +1,3 @@
-<tbody>
 {{#each this}}
-    <tr class="{{timer_description}}">
-        <td style="width: 5px;">
-            <button class="modifyTimer btn-view-fund btn btn-default btn-xs pull-left" type="button"
-                    data-toggle="modal" data-target="#modifyTimerModel">
-                <span class="glyphicon glyphicon-edit" aria-hidden="true" role="button"></span>
-            </button>
-        </td>
-        <td style="width: 5px;">
-            <button class="deleteTimer btn-view-fund btn btn-default btn-xs pull-left" type="button"
-                    data-toggle="modal" data-target="#deleteTimerModel">
-                <span class="glyphicon glyphicon-remove" aria-hidden="true" role="button"></span>
-            </button>
-        </td>
-        <td style="width: 5px;">
-            <button class="playTimer btn-view-fund btn btn-default btn-xs pull-left {{timer_status}}" type="button">
-                <span class="glyphicon glyphicon-play" aria-hidden="true" role="button"></span>
-            </button>
-        </td>
-        <td style="width: 5px;">
-            <button class="pauseTimer btn-view-fund btn btn-default btn-xs pull-left" type="button">
-                <span class="glyphicon glyphicon-pause" aria-hidden="true" role="button"></span>
-            </button>
-        </td>
-        <td class="descriptionTimer" style="text-align: left;">{{timer_description}} :
-            {{timer_total.hours}}:{{timer_total.minutes}}
-            ({{timer_interval.hours}}'{{timer_interval.minutes}}"/d)
-        </td>
-    </tr>
+    {{> addtimer}}
 {{/each}}
-</tbody>
-
-

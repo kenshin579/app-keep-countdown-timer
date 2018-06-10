@@ -20,10 +20,11 @@ define([], function () {
 
         addTimerToDb: function (args, successCallback, context) {
             $.ajax({
-                url: 'http://localhost:3000/api/add',
-                dataType: 'json',
-                type: 'POST',
-                data: args,
+                url: "http://localhost:3000/api/add",
+                contentType: "application/json;charset=UTF-8",
+                type: "POST",
+                data: JSON.stringify(args),
+                cache: false,
                 success: function (resultJson) {
                     console.log("resultJson:", resultJson);
                     successCallback.call(context, resultJson);

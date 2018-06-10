@@ -1,5 +1,5 @@
 define([
-    "common/Event",
+    "common/Event"
 ], function (Event) {
     var TimerModel = function TimerModel() {
         this.timers = [];
@@ -15,7 +15,7 @@ define([
             this.timers.push(timer);
 
             //views에 update하기
-            this.addTimerEvent.notify();
+            this.addTimerEvent.notify(timer);
         },
 
         deleteTimer: function () {
