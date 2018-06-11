@@ -37,6 +37,24 @@ router.post('/add', function (req, res, next) {
     });
 });
 
+router.post('/update', function (req, res, next) {
+    logger.info("req", req);
+    var query = {'timer_description' : req.body.timer_description};
+    var updateData = {
+        "timer_description" : req.body.timer_description,
+        "timer_status": req.body.timer_status
+    };
+
+    Timer.findOneAndUpdate(query, updateData, function (err) {
+        if (err) {
+            logger.error(err);
+            res.json({result: 0});
+            return;
+        }
+
+        res.json({result: 1});
+    });
+});
 
 
 //delete timer

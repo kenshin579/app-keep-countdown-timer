@@ -19,14 +19,16 @@ define([
             this.addTimerHandler = this.addTimer.bind(this);
             this.deleteTimerHandler = this.deleteTimer.bind(this);
             this.listTimersHandler = this.listTimers.bind(this);
+            this.updateTimerHandler = this.updateTimer.bind(this);
             return this;
         },
 
         _registerHandlers: function () {
             //View의 Event 함수를 등록함
-            this.view.addTimerEvent.attach(this.addTimerHandler);
-            this.view.deleteTimerEvent.attach(this.deleteTimerHandler);
-            this.view.listTimersEvent.attach(this.listTimersHandler);
+            this.view.addTimerEventForController.attach(this.addTimerHandler);
+            this.view.deleteTimerEventForController.attach(this.deleteTimerHandler);
+            this.view.listTimersEventForController.attach(this.listTimersHandler);
+            this.view.updateTimerEventForController.attach(this.updateTimerHandler);
             return this;
         },
 
@@ -59,6 +61,18 @@ define([
         listTimers: function () {
             console.log("controller list");
             this.model.setTimers();
+        },
+
+        updateTimer: function (sender, data) {
+            console.log("controller update data:", data);
+
+            Requester.updateTimerToDb(data, function (resultFromDb) {
+                if (resultFromDb.result) {
+                    this.model.updateTimer(data);
+                } else {
+                    console.error("error from db");
+                }
+            }, this);
         }
     };
 

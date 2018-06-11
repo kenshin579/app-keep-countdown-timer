@@ -4,9 +4,9 @@ define([
     var TimerModel = function TimerModel() {
         this.timers = [];
 
-        this.addTimerEvent = new Event(this);
-        this.deleteTimerEvent = new Event(this);
-        this.listTimersEvent = new Event(this);
+        this.addTimerEventForView = new Event(this);
+        this.deleteTimerEventForView = new Event(this);
+        this.listTimersEventForView = new Event(this);
     };
 
     TimerModel.prototype = {
@@ -15,7 +15,7 @@ define([
             this.timers.push(timer);
 
             //views에 update하기
-            this.addTimerEvent.notify(timer);
+            this.addTimerEventForView.notify(timer);
         },
 
         deleteTimer: function () {
@@ -29,7 +29,23 @@ define([
         setTimers: function (resultJson) {
             console.log("model setTimers", resultJson);
             this.timers = resultJson;
-            this.listTimersEvent.notify();
+            this.listTimersEventForView.notify();
+        },
+
+        updateTimer: function(timer) {
+            console.log("model updateTimer", timer);
+
+            console.log("before", this.timers);
+            this.timers.forEach(function(timerObj, index) {
+                console.log("element", timerObj, "index", index);
+                console.log("timer", timer);
+                if (timerObj.timer_description === timer.timer_description) {
+                    timerObj.timer_status = timer.timer_status;
+                }
+            });
+
+            console.log("after", this.timers);
+            //todo: UI 갱신을 나중에 해야 할까? (현재 ui를 먼제 갱신하고 서버에 반영하고 나서 client model에 반영함)
         }
     };
 

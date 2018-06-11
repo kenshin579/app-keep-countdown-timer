@@ -13,9 +13,10 @@ define([
     var TimerView = function TimerView(model) {
         this.model = model;
 
-        this.addTimerEvent = new Event(this);
-        this.deleteTimerEvent = new Event(this);
-        this.listTimersEvent = new Event(this);
+        this.addTimerEventForController = new Event(this);
+        this.deleteTimerEventForController = new Event(this);
+        this.listTimersEventForController = new Event(this);
+        this.updateTimerEventForController = new Event(this);
         this.init();
     };
 
@@ -33,7 +34,7 @@ define([
             this.$mainTimerStartButton = $("#main-timer-start");
             this.$mainTimerStopButton = $("#main-timer-stop");
 
-            this.$timeTable = $("#timeTable tr:has(td)");
+            this.$timeTable = $("#timeTable");
             this.$btnSubmitModel = $("#btnSubmitModal");
 
             this.$addModal = $("#newTimerModel");
@@ -52,21 +53,20 @@ define([
             this.addTimerHandler = this.addTimer.bind(this);
             this.deleteTimerHandler = this.deleteTimer.bind(this);
             this.listTimersHandler = this.listTimers.bind(this);
-
             return this;
         },
 
         _registerHandlers: function () {
             //UI component에 대한 함수 등록
-            this.$timeTable.click(this.clickTableHandler);
+            this.$timeTable.on("click", "tr", this.clickTableHandler);
             this.$btnSubmitModel.click(this.addTimerButtonHandler);
             this.$mainTimerStartButton.click(this.startCountDownTimerHandler);
             this.$mainTimerStopButton.click(this.stopCountDownTimerHandler);
 
             //Model의 Event에 함수 등록함
-            this.model.addTimerEvent.attach(this.addTimerHandler);
-            this.model.deleteTimerEvent.attach(this.deleteTimerHandler);
-            this.model.listTimersEvent.attach(this.listTimersHandler);
+            this.model.addTimerEventForView.attach(this.addTimerHandler);
+            this.model.deleteTimerEventForView.attach(this.deleteTimerHandler);
+            this.model.listTimersEventForView.attach(this.listTimersHandler);
 
             this.$addModal.on("hidden.bs.modal", this._resetModal);
             this.$deleteModal.on("hidden.bs.modal", this._resetModal);
@@ -95,14 +95,15 @@ define([
 
         },
 
-        _identifySelectedTimerAndButton: function (e) {
-            var $clickClasses = $(e.target).is("button") ? $(e.target).attr("class") : $(e.target).parent().attr("class");
+        _identifySelectedTimerAndButton: function (event) {
+            console.log("e", $(event.target));
+            var $clickClasses = $(event.target).is("button") ? $(event.target).attr("class") : $(event.target).parent().attr("class");
             var firstClassName = $clickClasses.split(" ")[0];
-            var trTagClassName = $(e.target).closest("tr");
+            var trTagClassName = $(event.target).closest("tr");
 
             return {
                 timer_description: trTagClassName.attr("class"),
-                clicked_button: firstClassName
+                clickedButton: firstClassName
             }
         },
 
@@ -118,7 +119,7 @@ define([
         addTimerButton: function () {
             console.log("view addTimerButton");
 
-            this.addTimerEvent.notify({
+            this.addTimerEventForController.notify({
                 timer_description: $("#newTimerDescription").val(),
                 timer_interval: {
                     hours: $("#newTimerHours").val(),
@@ -133,9 +134,57 @@ define([
             });
         },
 
-        clickTable: function (e) {
-            // e.stopPropagation();
-            var selectedTimer = this._identifySelectedTimerAndButton(e);
+        _enableTimerUI: function (event) {
+            console.log("_enableTimerUI event", $(event.target));
+
+            if ($(event.target).is("button")) {
+                console.log("===> 1");
+                $(event.target).addClass("active");
+
+            } else {
+                console.log("===> 2");
+                $(event.target).parent().addClass("active");
+            }
+
+            $(event.target).closest("td").next().find("button").removeClass("active");
+        },
+
+
+        _disableTimerUI: function (event) {
+            //enable pause
+            if ($(event.target).is("button")) {
+                console.log("===> 1");
+                $(event.target).addClass("active");
+            } else {
+                console.log("===> 2");
+                $(event.target).parent().addClass("active");
+            }
+
+            //disable play
+            $(event.target).closest("td").prev().find("button").removeClass("active");
+        },
+
+
+        clickTable: function (event) {
+            var selectedTimer = this._identifySelectedTimerAndButton(event);
+            console.log("view clickTable selectedTimer", selectedTimer);
+
+            if (selectedTimer.clickedButton === "pauseTimer") {
+                this._disableTimerUI(event);
+
+                this.updateTimerEventForController.notify({
+                    timer_description: selectedTimer.timer_description,
+                    timer_status: ""
+                });
+            }
+
+            if (selectedTimer.clickedButton === "playTimer") {
+                this._enableTimerUI(event);
+                this.updateTimerEventForController.notify({
+                    timer_description: selectedTimer.timer_description,
+                    timer_status: "active"
+                });
+            }
         },
 
         startCountDownTimer: function () {
@@ -156,7 +205,6 @@ define([
                     $("#timer-list").last().append(htmlTemplate);
                 });
             } else {
-
                 //todo: nested ajax call 개선하기
                 var self = this;
                 CommonUtils.getTemplate("templates/addtimer-template.hbs", function (hbsAddTemplate) {
