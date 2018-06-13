@@ -14,7 +14,7 @@ var timerSchema = new Schema({
         minutes: {type: Number}
     },
     timer_status: {
-        type: String
+        type: Boolean
     },
     start_date: {
         type: Date,

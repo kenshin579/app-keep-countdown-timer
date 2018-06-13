@@ -35,16 +35,11 @@ define([
         updateTimer: function(timer) {
             console.log("model updateTimer", timer);
 
-            console.log("before", this.timers);
             this.timers.forEach(function(timerObj, index) {
-                console.log("element", timerObj, "index", index);
-                console.log("timer", timer);
                 if (timerObj.timer_description === timer.timer_description) {
                     timerObj.timer_status = timer.timer_status;
                 }
             });
-
-            console.log("after", this.timers);
             //todo: UI 갱신을 나중에 해야 할까? (현재 ui를 먼제 갱신하고 서버에 반영하고 나서 client model에 반영함)
         }
     };

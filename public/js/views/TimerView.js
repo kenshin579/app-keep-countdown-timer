@@ -129,7 +129,7 @@ define([
                     hours: $("#newTimerHours").val(),
                     minutes: $("#newTimerMinutes").val()
                 },
-                timer_status: "active",
+                timer_status: true,
                 start_date: Date.now(moment().format('YYYY-MM-DD'))
             });
         },
@@ -138,11 +138,9 @@ define([
             console.log("_enableTimerUI event", $(event.target));
 
             if ($(event.target).is("button")) {
-                console.log("===> 1");
                 $(event.target).addClass("active");
 
             } else {
-                console.log("===> 2");
                 $(event.target).parent().addClass("active");
             }
 
@@ -153,10 +151,8 @@ define([
         _disableTimerUI: function (event) {
             //enable pause
             if ($(event.target).is("button")) {
-                console.log("===> 1");
                 $(event.target).addClass("active");
             } else {
-                console.log("===> 2");
                 $(event.target).parent().addClass("active");
             }
 
@@ -174,7 +170,7 @@ define([
 
                 this.updateTimerEventForController.notify({
                     timer_description: selectedTimer.timer_description,
-                    timer_status: ""
+                    timer_status: false
                 });
             }
 
@@ -182,7 +178,7 @@ define([
                 this._enableTimerUI(event);
                 this.updateTimerEventForController.notify({
                     timer_description: selectedTimer.timer_description,
-                    timer_status: "active"
+                    timer_status: true
                 });
             }
         },

@@ -17,10 +17,18 @@ db.once('open', function () {
 var TimerDb = require('../models/timer');
 var Timer = mongoose.model('timer');
 
+Timer.remove({}, function (err) {
+    if (err) {
+        console.log(err)
+    } else {
+    }
+});
+
+
 Timer.count({}, function (err, count) {
     console.log("Number of docs: ", count);
 
-    if (count == 0) {
+    if (count === 0) {
         Timer.insertMany(JSON_TEST)
             .then(function (mongooseDocuments) {
                 if (mongooseDocuments) {

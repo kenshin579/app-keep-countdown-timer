@@ -32,6 +32,12 @@ define([
             return this;
         },
 
+        /**
+         * 첫화면에서 timers 목록을 가져옴
+         *
+         * @returns {TimerController}
+         * @private
+         */
         _loadTimersFromDb: function () {
             Requester.getTimersFromDb(function (resultJson) {
                 this.model.setTimers(resultJson);
