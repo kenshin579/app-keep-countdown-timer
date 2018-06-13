@@ -108,7 +108,7 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">
                     Close
                 </button>
-                <button type="submit" class="btn btn-success" data-dismiss="modal" id="btnSubmitModal">
+                <button type="submit" class="btn btn-success" data-dismiss="modal" id="btnAddSubmitModal">
                     Save Changes
                 </button>
             </div>
@@ -134,14 +134,14 @@
 
             <!-- Modal Body -->
             <div class="modal-body">
-                <p>You are about to delete this timer, this procedure is irreversible.</p>
+                <p>You are about to delete this timer (<span class="deleteTimerDescription"></span>), this procedure is irreversible.</p>
                 <p>Do you want to proceed?</p>
             </div>
 
             <!-- Modal Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-danger btn-ok">Delete</a>
+                <button type="submit" class="btn btn-danger" data-dismiss="modal" id="btnDeleteSubmitModal">Delete</button>
             </div>
         </div>
     </div>

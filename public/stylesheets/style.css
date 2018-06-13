@@ -27,3 +27,8 @@
 .alert {
     display: none;
 }
+
+.deleteTimerDescription {
+    color: red;
+    font-weight: bold;
+}

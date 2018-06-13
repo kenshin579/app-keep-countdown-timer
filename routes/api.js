@@ -58,20 +58,17 @@ router.post('/update', function (req, res, next) {
 
 
 //delete timer
-router.delete('/:timer_name', function (req, res, next) {
-    logger.info("req", req);
+router.post('/delete', function (req, res, next) {
+    logger.info("req.body.timer_description", req.body.timer_description);
 
-    // addTimer.timer_description = req.body.newTimerDescription;
-
-    // addTimer.save(function (err) {
-    //     if (err) {
-    //         logger.error(err);
-    //         res.json({result: 0});
-    //         return;
-    //     }
-    //
-    //     res.json({result: 1});
-    // });
+    Timer.findOneAndRemove(req.body.timer_description, function (err) {
+        if (err) {
+            logger.error(err);
+            res.json({result: 0});
+            return;
+        }
+        res.json({result: 1});
+    });
 });
 
 module.exports = router;

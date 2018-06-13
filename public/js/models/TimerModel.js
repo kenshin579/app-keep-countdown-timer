@@ -18,8 +18,16 @@ define([
             this.addTimerEventForView.notify(timer);
         },
 
-        deleteTimer: function () {
-            console.log("model deleteTimer");
+        deleteTimer: function (timer) {
+            console.log("model deleteTimer", timer);
+            var self = this;
+
+            this.timers.forEach(function (timerObj, index) {
+                if (timerObj.timer_description === timer.timer_description) {
+                    self.timers.splice(index, 1);
+                }
+            });
+            this.deleteTimerEventForView.notify(timer);
         },
 
         getTimers: function () {
@@ -32,10 +40,10 @@ define([
             this.listTimersEventForView.notify();
         },
 
-        updateTimer: function(timer) {
+        updateTimer: function (timer) {
             console.log("model updateTimer", timer);
 
-            this.timers.forEach(function(timerObj, index) {
+            this.timers.forEach(function (timerObj, index) {
                 if (timerObj.timer_description === timer.timer_description) {
                     timerObj.timer_status = timer.timer_status;
                 }

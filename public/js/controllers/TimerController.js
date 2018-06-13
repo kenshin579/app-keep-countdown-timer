@@ -58,10 +58,15 @@ define([
             }, this);
         },
 
-        deleteTimer: function () {
-            console.log("controller delete");
-            this.model.deleteTimer();
-            // this.model.deleteTasks();
+        deleteTimer: function (sender, data) {
+            console.log("controller delete data", data);
+            Requester.deleteTimerToDb(data, function (resultFromDB) {
+                if (resultFromDB.result) {
+                    this.model.deleteTimer(data);
+                } else {
+                    console.error("error from db");
+                }
+            }, this);
         },
 
         listTimers: function () {

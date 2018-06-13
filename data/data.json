@@ -36,6 +36,32 @@
       "minutes": 30
     },
     "timer_status": true,
-    "start_date": "2017-04-01"
+    "start_date": "2017-04-03"
+  },
+  {
+    "timer_description": "기타 연습",
+    "timer_interval": {
+      "hours": 0,
+      "minutes": 30
+    },
+    "timer_total": {
+      "hours": 2,
+      "minutes": 30
+    },
+    "timer_status": true,
+    "start_date": "2017-04-07"
+  },
+  {
+    "timer_description": "자전거 운동",
+    "timer_interval": {
+      "hours": 1,
+      "minutes": 30
+    },
+    "timer_total": {
+      "hours": 3,
+      "minutes": 30
+    },
+    "timer_status": true,
+    "start_date": "2017-04-02"
   }
 ]
