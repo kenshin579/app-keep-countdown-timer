@@ -26,26 +26,23 @@ router.post('/add', function (req, res, next) {
 
     newTimer.start_date = req.body.start_date;
 
-    newTimer.save(function (err) {
+    newTimer.save(function (err, timer) {
         if (err) {
             logger.error(err);
             res.json({result: 0});
             return;
         }
-
-        res.json({result: 1});
+        res.json({result: 1, _id: timer._id});
     });
 });
 
 router.post('/update', function (req, res, next) {
     logger.info("req", req);
-    var query = {'timer_description' : req.body.timer_description};
     var updateData = {
-        "timer_description" : req.body.timer_description,
         "timer_status": req.body.timer_status
     };
 
-    Timer.findOneAndUpdate(query, updateData, function (err) {
+    Timer.findByIdAndUpdate(req.body._id, updateData, function (err) {
         if (err) {
             logger.error(err);
             res.json({result: 0});
@@ -58,10 +55,10 @@ router.post('/update', function (req, res, next) {
 
 
 //delete timer
-router.post('/delete', function (req, res, next) {
-    logger.info("req.body.timer_description", req.body.timer_description);
+router.delete('/delete/:id', function (req, res, next) {
+    // logger.info("req.params.id", req.params.id);
 
-    Timer.findOneAndRemove(req.body.timer_description, function (err) {
+    Timer.findByIdAndRemove(req.params.id, function (err) {
         if (err) {
             logger.error(err);
             res.json({result: 0});

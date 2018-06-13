@@ -43,10 +43,9 @@ define([], function () {
 
         deleteTimerToDb: function (args, successCallback, context) {
             $.ajax({
-                url: "http://localhost:3000/api/delete",
+                url: "http://localhost:3000/api/delete/" + args.timerId,
                 contentType: "application/json;charset=UTF-8",
-                type: "POST",
-                data: JSON.stringify(args),
+                type: "DELETE",
                 cache: false,
                 success: function (resultJson) {
                     console.log("resultJson:", resultJson);

@@ -23,7 +23,7 @@ define([
             var self = this;
 
             this.timers.forEach(function (timerObj, index) {
-                if (timerObj.timer_description === timer.timer_description) {
+                if (timerObj._id === timer.timerId) {
                     self.timers.splice(index, 1);
                 }
             });

@@ -51,6 +51,7 @@ define([
 
             Requester.addTimerToDb(data, function (resultFromDB) {
                 if (resultFromDB.result) {
+                    data["_id"] = resultFromDB._id;
                     this.model.addTimer(data);
                 } else {
                     console.error("error from db");
