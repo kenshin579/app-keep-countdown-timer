@@ -109,12 +109,12 @@ define([
          */
         _identifySelectedTimerAndButton: function (event) {
             var $clickClasses = $(event.target).is("button") ? $(event.target).attr("class") : $(event.target).parent().attr("class");
-            var firstClassName = $clickClasses.split(" ")[0];
-            var trTagClassName = $(event.target).closest("tr").data();
+            var buttonName = $clickClasses.split(" ")[0];
+            var timerId = $(event.target).closest("tr").data().timerId;
 
             return {
-                _id: trTagClassName.timerId,
-                clickedButton: firstClassName
+                _id: timerId,
+                clickedButton: buttonName
             }
         },
 
