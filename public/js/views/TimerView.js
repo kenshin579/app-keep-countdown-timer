@@ -38,7 +38,7 @@ define([
             this.$btnAddSubmitModel = $("#btnAddSubmitModal");
             this.$btnDeleteSubmitModel = $("#btnDeleteSubmitModal");
 
-            this.$addModal = $("#newTimerModel");
+            this.$addModal = $("#addTimerModel");
             this.$deleteModal = $("#deleteTimerModel");
             this.$modifyTimerModel = $("#modifyTimerModel");
             return this;
@@ -194,14 +194,14 @@ define([
             console.log("view addTimerButton");
 
             this.addTimerEventForController.notify({
-                timer_description: $("#newTimerDescription").val(),
+                timer_description: $("#addTimerDescription").val(),
                 timer_interval: {
-                    hours: $("#newTimerHours").val(),
-                    minutes: $("#newTimerMinutes").val()
+                    hours: $("#addTimerHours").val(),
+                    minutes: $("#addTimerMinutes").val()
                 },
                 timer_total: {
-                    hours: $("#newTimerHours").val(),
-                    minutes: $("#newTimerMinutes").val()
+                    hours: $("#addTimerHours").val(),
+                    minutes: $("#addTimerMinutes").val()
                 },
                 timer_status: true,
                 start_date: Date.now(moment().format("YYYY-MM-DD"))
