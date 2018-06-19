@@ -177,14 +177,22 @@
                     </div>
                     <div class="form-group">
                         <p>Interval per day:</p>
-                        <label for="addTimerHours">Hours</label>
+                        <label for="modifyTimerHours">Hours</label>
                         <input type="number" placeholder="00" min="0" max="12" maxlength="2" class="form-control"
                                id="modifyTimerHours">
-                        <label for="addTimerMinutes">Minutes</label>
+                        <label for="modifyTimerMinutes">Minutes</label>
                         <input type="number" placeholder="00" min="0" max="59" maxlength="2" class="form-control"
                                id="modifyTimerMinutes">
                     </div>
-                    <button type="submit" class="btn btn-default">Submit</button>
+                    <div class="form-group">
+                        <p>Total hours and minutes:</p>
+                        <label for="modifyTimerTotalHours">Hours</label>
+                        <input type="number" placeholder="00" min="0" max="12" maxlength="2" class="form-control"
+                               id="modifyTimerTotalHours">
+                        <label for="modifyTimerTotalMinutes">Minutes</label>
+                        <input type="number" placeholder="00" min="0" max="59" maxlength="2" class="form-control"
+                               id="modifyTimerTotalMinutes">
+                    </div>
                 </form>
             </div>
 
@@ -192,6 +200,9 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">
                     Close
+                </button>
+                <button type="submit" class="btn btn-success" data-dismiss="modal" id="btnModifySubmitModal">
+                    Save Changes
                 </button>
             </div>
         </div>

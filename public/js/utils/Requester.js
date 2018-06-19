@@ -43,9 +43,32 @@ define([], function () {
 
         deleteTimerToDb: function (args, successCallback, context) {
             $.ajax({
-                url: "http://localhost:3000/api/delete/" + args.timerId,
+                url: "http://localhost:3000/api/delete/" + args._id,
                 contentType: "application/json;charset=UTF-8",
                 type: "DELETE",
+                cache: false,
+                success: function (resultJson) {
+                    console.log("resultJson:", resultJson);
+                    successCallback.call(context, resultJson);
+                    //
+                    // if (data.result) {
+                    //     self._showMessage(Constants.MESSAGE_SUCCESS, "저장 성공");
+                    // } else {
+                    //     self._showMessage(Constants.MESSAGE_FAIL, "저장 실패");
+                    // }
+                },
+                error: function (request, status, error) {
+                    console.error("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            });
+        },
+
+        modifyTimerToDb: function (args, successCallback, context) {
+            $.ajax({
+                url: "http://localhost:3000/api/modify/" + args._id,
+                contentType: "application/json;charset=UTF-8",
+                type: "POST",
+                data: JSON.stringify(args),
                 cache: false,
                 success: function (resultJson) {
                     console.log("resultJson:", resultJson);
@@ -67,7 +90,7 @@ define([], function () {
             console.log("updateTimerToDb args", args);
 
             $.ajax({
-                url: "http://localhost:3000/api/update",
+                url: "http://localhost:3000/api/update/"+ args._id,
                 contentType: "application/json;charset=UTF-8",
                 type: "POST",
                 data: JSON.stringify(args),

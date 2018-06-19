@@ -36,23 +36,33 @@ router.post('/add', function (req, res, next) {
     });
 });
 
-router.post('/update', function (req, res, next) {
-    logger.info("req", req);
+
+router.post('/modify/:id', function (req, res, next) {
+    logger.info("req.params.id", req.params.id);
+
     var updateData = {
-        "timer_status": req.body.timer_status
+        $set: {
+            timer_description: req.body.timer_description,
+            timer_interval: {
+                hours: req.body.timer_interval.hours,
+                minutes: req.body.timer_interval.minutes
+            },
+            timer_total: {
+                hours: req.body.timer_total.hours,
+                minutes: req.body.timer_total.minutes
+            }
+        }
     };
 
-    Timer.findByIdAndUpdate(req.body._id, updateData, function (err) {
+    Timer.findByIdAndUpdate(req.params.id, updateData, function (err, timer) {
         if (err) {
             logger.error(err);
             res.json({result: 0});
             return;
         }
-
-        res.json({result: 1});
+        res.json({result: 1, _id: timer._id});
     });
 });
-
 
 //delete timer
 router.delete('/delete/:id', function (req, res, next) {
@@ -64,6 +74,24 @@ router.delete('/delete/:id', function (req, res, next) {
             res.json({result: 0});
             return;
         }
+        res.json({result: 1});
+    });
+});
+
+router.post('/update/:id', function (req, res, next) {
+    // logger.info("req", req);
+    logger.info("req.params.id", req.params.id);
+    var updateData = {
+        "timer_status": req.body.timer_status
+    };
+
+    Timer.findByIdAndUpdate(req.params.id, updateData, function (err) {
+        if (err) {
+            logger.error(err);
+            res.json({result: 0});
+            return;
+        }
+
         res.json({result: 1});
     });
 });

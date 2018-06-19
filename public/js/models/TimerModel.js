@@ -6,6 +6,7 @@ define([
 
         this.addTimerEventForView = new Event(this);
         this.deleteTimerEventForView = new Event(this);
+        this.modifyTimerEventForView = new Event(this);
         this.listTimersEventForView = new Event(this);
     };
 
@@ -20,14 +21,30 @@ define([
 
         deleteTimer: function (timer) {
             console.log("model deleteTimer", timer);
-            var self = this;
-
-            this.timers.forEach(function (timerObj, index) {
-                if (timerObj._id === timer.timerId) {
-                    self.timers.splice(index, 1);
+            var i;
+            for (i = 0; i < this.timers.length; i++) {
+                if (this.timers[i]._id = timer._id) {
+                    this.timers.splice(i, 1);
                 }
-            });
+            }
             this.deleteTimerEventForView.notify(timer);
+        },
+
+        modifyTimer: function (timer) {
+            console.log("model modifyTimer", timer);
+            var i;
+            for (i = 0; i < this.timers.length; i++) {
+                if (this.timers[i]._id = timer._id) {
+                    this.timers[i].timer_description = timer.timer_description;
+                    this.timers[i].timer_interval.hours = timer.timer_interval.hours;
+                    this.timers[i].timer_interval.minutes = timer.timer_interval.minutes;
+
+                    this.timers[i].timer_total.hours = timer.timer_total.hours;
+                    this.timers[i].timer_total.minutes = timer.timer_total.minutes;
+                }
+            }
+            //views에 update하기
+            this.modifyTimerEventForView.notify(timer);
         },
 
         getTimers: function () {
