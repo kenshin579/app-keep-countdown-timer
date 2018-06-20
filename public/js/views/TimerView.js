@@ -116,27 +116,31 @@ define([
          */
         _identifySelectedTimerAndButton: function (event) {
             var $clickClasses = $(event.target).is("button") ? $(event.target).attr("class") : $(event.target).parent().attr("class");
-            var buttonName = $clickClasses.split(" ")[0];
-            var timerId = $(event.target).closest("tr").data().timerId;
+            var buttonName;
+            var timerId;
 
+            if ($clickClasses) {
+                buttonName = $clickClasses.split(" ")[0];
+                timerId = $(event.target).closest("tr").data().timerId;
+            }
             return {
                 _id: timerId,
                 clickedButton: buttonName
             }
         },
 
-        _parseTimeHourAndMinsFromTimerDescription: function () {
-            // var clickedTableCell = $(e.target).closest("td");
-            // var REGREX_EXTRACT_TIMER = /.* ([0-9]+:[0-9]+).*/g;
-            // var extractTimerValue = REGREX_EXTRACT_TIMER.exec(clickedTableCell.text());
-            // if (extractTimerValue) {
-            //     $("#main-timer").text(extractTimerValue[0]);
-            // }
+        _loadTotalTimer: function (event) {
+            console.log("view _loadTotalTimer");
+            var clickedTableCell = $(event.target).closest("td");
+            var REGEX_TIMER_DESCRIPTION = /\s+([0-9]+\:[0-9]+)\s+\([0-9]+:[0-9]+\)/;
+            var extractedTimerInfo = clickedTableCell.text().split("-")[1].match(REGEX_TIMER_DESCRIPTION);
+            var extractedTotalHours = extractedTimerInfo[1].split(":")[0];
+            var extractedTotalMinutes = extractedTimerInfo[1].split(":")[1];
+            $("#main-timer").text(extractedTotalHours + ":" + extractedTotalMinutes);
         },
 
         _displayTimerDescriptionOnDeleteModalDialog: function (event) {
             console.log("view _displayTimerDescriptionOnDeleteModalDialog");
-            // var $clickClasses = $(event.relatedTarget).is("button") ? $(event.relatedTarget).attr("class") : $(event.relatedTarget).parent().attr("class");
             var extractedTimerId = $(event.relatedTarget).parent().closest("tr").data().timerId;
             var extractedTimerDescription = $(event.relatedTarget).parent().siblings(".descriptionTimer").text().split("-")[0];
             $(event.target).find(".deleteTimerDescription").html(extractedTimerDescription);
@@ -145,10 +149,11 @@ define([
 
         _displayTimerDescriptionOnModifyModalDialog: function (event) {
             console.log("view _displayTimerDescriptionOnModifyModalDialog");
+            var REGEX_TIMER_DESCRIPTION = /\s+([0-9]+\:[0-9]+)\s+\(([0-9]+:[0-9]+)\)/;
             var extractedTimerId = $(event.relatedTarget).parent().closest("tr").data().timerId;
             var extractedTimerAndDescription = $(event.relatedTarget).parent().siblings(".descriptionTimer").text().split("-");
             var extractedTimerDescription = extractedTimerAndDescription[0].replace(/ +$/, "");
-            var extractedTimerInfo = extractedTimerAndDescription[1].match(/\s+([0-9]+\:[0-9]+)\s+\(([0-9]+:[0-9]+)\)/);
+            var extractedTimerInfo = extractedTimerAndDescription[1].match(REGEX_TIMER_DESCRIPTION);
             var extractedTotalHours = extractedTimerInfo[1].split(":")[0];
             var extractedTotalMinutes = extractedTimerInfo[1].split(":")[1];
             var extractedIntervalHours = extractedTimerInfo[2].split(":")[0];
@@ -273,6 +278,9 @@ define([
 
         clickTable: function (event) {
             var selectedTimer = this._identifySelectedTimerAndButton(event);
+            if (!selectedTimer._id) {
+                this._loadTotalTimer(event);
+            }
 
             console.log("view clickTable selectedTimer", selectedTimer);
 
