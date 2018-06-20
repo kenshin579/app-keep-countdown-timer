@@ -147,7 +147,7 @@ define([
             console.log("view _displayTimerDescriptionOnModifyModalDialog");
             var extractedTimerId = $(event.relatedTarget).parent().closest("tr").data().timerId;
             var extractedTimerAndDescription = $(event.relatedTarget).parent().siblings(".descriptionTimer").text().split("-");
-            var extractedTimerDescription = extractedTimerAndDescription[0];
+            var extractedTimerDescription = extractedTimerAndDescription[0].replace(/ +$/, "");
             var extractedTimerInfo = extractedTimerAndDescription[1].match(/\s+([0-9]+\:[0-9]+)\s+\(([0-9]+:[0-9]+)\)/);
             var extractedTotalHours = extractedTimerInfo[1].split(":")[0];
             var extractedTotalMinutes = extractedTimerInfo[1].split(":")[1];

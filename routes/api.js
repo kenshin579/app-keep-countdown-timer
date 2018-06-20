@@ -64,7 +64,6 @@ router.post('/modify/:id', function (req, res, next) {
     });
 });
 
-//delete timer
 router.delete('/delete/:id', function (req, res, next) {
     // logger.info("req.params.id", req.params.id);
 
