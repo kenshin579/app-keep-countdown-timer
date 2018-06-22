@@ -1,9 +1,9 @@
 define([], function () {
     "use strict";
-    var CountDownTimer = function (args) {
+    var CountDownTimer = function CountDownTimer(args) {
         this.name = args.name;
-        this.hour = args.hour;
-        this.min = args.min;
+        this.hours = args.hours;
+        this.minutes = args.minutes;
         this.sec = args.sec;
     };
 
