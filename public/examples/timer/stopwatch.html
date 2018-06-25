@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="js/stopwatch.js"></script>
+</head>
+<body>
+These 2 timers should count down from 10 minutes to 0 seconds:
+<p class="countdown-timer">00:10:00</p>
+<p class="countdown-timer">00:10:00</p>
+But this one will count from 0 to 6 seconds:
+<p class="countdown-timer-up">00:00:00</p>
+
+<script>
+
+    /******************
+     * MAIN SCRIPT
+     *****************/
+
+    $(document).ready(function () {
+        /*
+         * First example, producing 2 identical counters (countdowns)
+         */
+        $('.countdown-timer').each(function () {
+            var stopwatch = new Stopwatch({
+                'element': $(this),               // DOM element
+                'paused': false,                  // Status
+                'elapsed': 1000 * 60 * 10,        // Current time in milliseconds
+                'countingUp': false,              // Counting up or down
+                'timeLimit': 0,                   // Time limit in milliseconds
+                'updateRate': 100,                // Update rate, in milliseconds
+                'onTimeUp': function () {          // onTimeUp callback
+                    this.stop();
+                    $(this.element).html('Go home, it\'s closing time.');
+                },
+                'onTimeUpdate': function () {      // onTimeUpdate callback
+                    var t = this.elapsed,
+                        h = ('0' + Math.floor(t / 3600000)).slice(-2),
+                        m = ('0' + Math.floor(t % 3600000 / 60000)).slice(-2),
+                        s = ('0' + Math.floor(t % 60000 / 1000)).slice(-2);
+                    var formattedTime = h + ':' + m + ':' + s;
+                    $(this.element).html(formattedTime);
+                }
+            });
+        });
+        /*
+         * Second example, producing 1 counter (counting up to 6 seconds)
+         */
+        var stopwatch = new Stopwatch({
+            'element': $('.countdown-timer-up'),// DOM element
+            'paused': false,                    // Status
+            'elapsed': 0,                       // Current time in milliseconds
+            'countingUp': true,                 // Counting up or down
+            'timeLimit': 1000 * 6,              // Time limit in milliseconds
+            'updateRate': 100,                  // Update rate, in milliseconds
+            'onTimeUp': function () {            // onTimeUp callback
+                this.stop();
+                $(this.element).html('Countdown finished!');
+            },
+            'onTimeUpdate': function () {        // onTimeUpdate callback
+                var t = this.elapsed,
+                    h = ('0' + Math.floor(t / 3600000)).slice(-2),
+                    m = ('0' + Math.floor(t % 3600000 / 60000)).slice(-2),
+                    s = ('0' + Math.floor(t % 60000 / 1000)).slice(-2);
+                var formattedTime = h + ':' + m + ':' + s;
+                $(this.element).html(formattedTime);
+            }
+        });
+
+    });
+</script>
+</body>
+</html>

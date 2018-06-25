@@ -21,6 +21,7 @@ router.post('/add', function (req, res, next) {
 
     newTimer.timer_total.hours = req.body.timer_interval.hours;
     newTimer.timer_total.minutes = req.body.timer_interval.minutes;
+    newTimer.timer_total.seconds = 0;
 
     newTimer.timer_status = req.body.timer_status;
 
@@ -49,7 +50,8 @@ router.post('/modify/:id', function (req, res, next) {
             },
             timer_total: {
                 hours: req.body.timer_total.hours,
-                minutes: req.body.timer_total.minutes
+                minutes: req.body.timer_total.minutes,
+                seconds: req.body.timer_total.seconds
             }
         }
     };

@@ -1,6 +1,7 @@
 require.config({
     paths: {
-        domReady: "../js/lib/requirejs/domReady"
+        domReady: "../js/lib/requirejs/domReady",
+        utils: "../js/utils"
     }
 });
 

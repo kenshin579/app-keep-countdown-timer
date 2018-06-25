@@ -41,6 +41,7 @@ define([
 
                     this.timers[i].timer_total.hours = timer.timer_total.hours;
                     this.timers[i].timer_total.minutes = timer.timer_total.minutes;
+                    this.timers[i].timer_total.seconds = timer.timer_total.seconds;
                 }
             }
             //views에 update하기

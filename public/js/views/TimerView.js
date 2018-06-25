@@ -35,7 +35,7 @@ define([
             this.$mainTimerStartButton = $("#main-timer-start");
             this.$mainTimerStopButton = $("#main-timer-stop");
 
-            this.$timeTable = $("#timeTable");
+            this.$timerListTable = $("#timer-list");
             this.$btnAddSubmitModel = $("#btnAddSubmitModal");
             this.$btnDeleteSubmitModel = $("#btnDeleteSubmitModal");
             this.$btnModifySubmitModel = $("#btnModifySubmitModal");
@@ -64,7 +64,7 @@ define([
 
         _registerHandlers: function () {
             //UI component에 대한 함수 등록
-            this.$timeTable.on("click", "tr", this.clickTableHandler);
+            this.$timerListTable.on("click", "tr", this.clickTableHandler);
             this.$btnAddSubmitModel.on("click", this.addTimerButtonHandler);
             this.$btnDeleteSubmitModel.on("click", this.deleteTimerButtonHandler);
             this.$btnModifySubmitModel.on("click", this.modifyTimerButtonHandler);
@@ -104,7 +104,6 @@ define([
             setTimeout(function () {
                 $alertMessage.hide();
             }, 2000);
-
         },
 
         /**
@@ -132,11 +131,13 @@ define([
         _loadTotalTimer: function (event) {
             console.log("view _loadTotalTimer");
             var clickedTableCell = $(event.target).closest("td");
-            var REGEX_TIMER_DESCRIPTION = /\s+([0-9]+\:[0-9]+)\s+\([0-9]+:[0-9]+\)/;
+            var REGEX_TIMER_DESCRIPTION = /\s+([0-9]+\:[0-9]+\:[0-9]+)\s+\([0-9]+:[0-9]+\)/;
             var extractedTimerInfo = clickedTableCell.text().split("-")[1].match(REGEX_TIMER_DESCRIPTION);
+            console.log("extractedTimerInfo", extractedTimerInfo);
             var extractedTotalHours = extractedTimerInfo[1].split(":")[0];
             var extractedTotalMinutes = extractedTimerInfo[1].split(":")[1];
-            $("#main-timer").text(extractedTotalHours + ":" + extractedTotalMinutes);
+            var extractedTotalSeconds = extractedTimerInfo[1].split(":")[2];
+            $("#main-timer").text(extractedTotalHours + ":" + extractedTotalMinutes + ":" + extractedTotalSeconds);
         },
 
         _displayTimerDescriptionOnDeleteModalDialog: function (event) {
@@ -149,13 +150,14 @@ define([
 
         _displayTimerDescriptionOnModifyModalDialog: function (event) {
             console.log("view _displayTimerDescriptionOnModifyModalDialog");
-            var REGEX_TIMER_DESCRIPTION = /\s+([0-9]+\:[0-9]+)\s+\(([0-9]+:[0-9]+)\)/;
+            var REGEX_TIMER_DESCRIPTION = /\s+([0-9]+\:[0-9]+\:[0-9]+)\s+\(([0-9]+:[0-9]+)\)/;
             var extractedTimerId = $(event.relatedTarget).parent().closest("tr").data().timerId;
             var extractedTimerAndDescription = $(event.relatedTarget).parent().siblings(".descriptionTimer").text().split("-");
             var extractedTimerDescription = extractedTimerAndDescription[0].replace(/ +$/, "");
             var extractedTimerInfo = extractedTimerAndDescription[1].match(REGEX_TIMER_DESCRIPTION);
             var extractedTotalHours = extractedTimerInfo[1].split(":")[0];
             var extractedTotalMinutes = extractedTimerInfo[1].split(":")[1];
+            var extractedTotalSeconds = extractedTimerInfo[1].split(":")[2];
             var extractedIntervalHours = extractedTimerInfo[2].split(":")[0];
             var extractedIntervalMinutes = extractedTimerInfo[2].split(":")[1];
             $(event.target).find("#modifyTimerDescription").val(extractedTimerDescription);
@@ -164,6 +166,7 @@ define([
 
             $(event.target).find("#modifyTimerTotalHours").val(extractedTotalHours);
             $(event.target).find("#modifyTimerTotalMinutes").val(extractedTotalMinutes);
+            $(event.target).find("#modifyTimerTotalSeconds").val(extractedTotalSeconds);
 
             $(event.target).find("#btnModifySubmitModal").attr("data-timer-id", extractedTimerId);
         },
@@ -196,7 +199,6 @@ define([
          */
         _addAndListTimersOnView: function (data) {
             // console.log("view _addAndListTimersOnView data", data);
-            console.log("timers", this.model.timers);
             if (data) {
                 CommonUtils.getTemplate("templates/addtimer-template.hbs", function (hbsTemplate) {
                     var compiledTemplate = Handlebars.compile(hbsTemplate);
@@ -226,7 +228,7 @@ define([
         _modifyTimersOnView: function (data) {
             console.log("view _modifyTimersOnView data", data);
             console.log("timers", this.model.timers);
-            var description = data.timer_description + " - " + data.timer_total.hours + ":" + data.timer_total.minutes + "(" + data.timer_interval.hours + ":" + data.timer_interval.minutes + ")";
+            var description = data.timer_description + " - " + data.timer_total.hours + ":" + data.timer_total.minutes + ":" + data.timer_total.seconds + " (" + data.timer_interval.hours + ":" + data.timer_interval.minutes + ")";
             $("#timer-list").find("[data-timer-id=" + data._id + "]").find(".descriptionTimer").html(description);
         },
 
@@ -241,7 +243,8 @@ define([
                 },
                 timer_total: {
                     hours: $("#addTimerHours").val(),
-                    minutes: $("#addTimerMinutes").val()
+                    minutes: $("#addTimerMinutes").val(),
+                    seconds: 0
                 },
                 timer_status: true,
                 start_date: Date.now(moment().format("YYYY-MM-DD"))
@@ -271,13 +274,16 @@ define([
                 },
                 timer_total: {
                     hours: $("#modifyTimerTotalHours").val(),
-                    minutes: $("#modifyTimerTotalMinutes").val()
+                    minutes: $("#modifyTimerTotalMinutes").val(),
+                    seconds: $("#modifyTimerTotalSeconds").val()
                 }
             });
         },
 
         clickTable: function (event) {
+            console.log("event", event);
             var selectedTimer = this._identifySelectedTimerAndButton(event);
+            console.log("selectedTimer", selectedTimer);
             if (!selectedTimer._id) {
                 this._loadTotalTimer(event);
             }

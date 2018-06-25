@@ -1,33 +1,23 @@
-define([], function () {
+define([
+    "utils/CountDownTimer"
+], function (CountDownTimer) {
     "use strict";
 
-    // describe("A suite is just a function", function () {
-    //     var a;
-    //
-    //     it("and so is a spec1", function () {
-    //         console.log("test");
-    //         a = true;
-    //
-    //         expect(a).toBe(true);
-    //     });
-    //
-    //     it("and so is a spec2", function () {
-    //         console.log("test");
-    //         a = true;
-    //
-    //         expect(a).toBe(true);
-    //     });
-    // });
+    describe("기본 기능 테스트", function () {
+        var countTimer = new CountDownTimer({
+            hours: 5,
+            minutes: 10,
+            seconds: 10
+        });
 
-    describe("B suite is just a function", function () {
-        var a;
+        it("test1", function () {
+            countTimer.print();
+            // expect(a).toBe(true);
+        });
 
-        it("and so is a spec3", function () {
-            console.log("test");
-            a = true;
-
-            expect(a).toBe(true);
+        it("test1", function () {
+            countTimer.start();
+            // expect(a).toBe(true);
         });
     });
-
 });
