@@ -35,17 +35,23 @@ define([
             var i;
             for (i = 0; i < this.timers.length; i++) {
                 if (this.timers[i]._id = timer._id) {
-                    this.timers[i].timer_description = timer.timer_description;
-                    this.timers[i].timer_interval.hours = timer.timer_interval.hours;
-                    this.timers[i].timer_interval.minutes = timer.timer_interval.minutes;
-
-                    this.timers[i].timer_total.hours = timer.timer_total.hours;
-                    this.timers[i].timer_total.minutes = timer.timer_total.minutes;
-                    this.timers[i].timer_total.seconds = timer.timer_total.seconds;
+                    if (timer.timer_description != null) {
+                        this.timers[i].timer_description = timer.timer_description;
+                    }
+                    if (timer.timer_interval != null) {
+                        this.timers[i].timer_interval.hours = timer.timer_interval.hours;
+                        this.timers[i].timer_interval.minutes = timer.timer_interval.minutes;
+                    }
+                    if (timer.timer_total != null) {
+                        this.timers[i].timer_total.hours = timer.timer_total.hours;
+                        this.timers[i].timer_total.minutes = timer.timer_total.minutes;
+                        this.timers[i].timer_total.seconds = timer.timer_total.seconds;
+                    }
+                    break;
                 }
             }
             //views에 update하기
-            this.modifyTimerEventForView.notify(timer);
+            this.modifyTimerEventForView.notify(this.timers[i]);
         },
 
         getTimers: function () {

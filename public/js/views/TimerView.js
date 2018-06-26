@@ -6,8 +6,9 @@ define([
     "handlebars",
     "common/Constants",
     "common/Event",
-    "utils/CommonUtils"
-], function ($, _, bootstrap, moment, Handlebars, Constants, Event, CommonUtils) {
+    "utils/CommonUtils",
+    "utils/CountDownTimer"
+], function ($, _, bootstrap, moment, Handlebars, Constants, Event, CommonUtils, CountDownTimer) {
     "use strict";
 
     var TimerView = function TimerView(model) {
@@ -18,6 +19,8 @@ define([
         this.modifyTimerEventForController = new Event(this);
         this.listTimersEventForController = new Event(this);
         this.updateTimerEventForController = new Event(this);
+
+        this.countDownTimer = new CountDownTimer();
         this.init();
     };
 
@@ -25,6 +28,7 @@ define([
         init: function () {
             console.log("view init");
             this._initializeDocumentObjects()
+                ._initializeUI()
                 ._setupHandlers()
                 ._registerHandlers();
         },
@@ -43,6 +47,11 @@ define([
             this.$addModal = $("#addTimerModel");
             this.$deleteModal = $("#deleteTimerModel");
             this.$modifyModel = $("#modifyTimerModel");
+            return this;
+        },
+
+        _initializeUI: function () {
+            this.$mainTimerStopButton.prop("disabled", true);
             return this;
         },
 
@@ -129,15 +138,16 @@ define([
         },
 
         _loadTotalTimer: function (event) {
-            console.log("view _loadTotalTimer");
+            // console.log("view _loadTotalTimer");
+            var timerId = $(event.target).closest("tr").attr("data-timer-id");
             var clickedTableCell = $(event.target).closest("td");
             var REGEX_TIMER_DESCRIPTION = /\s+([0-9]+\:[0-9]+\:[0-9]+)\s+\([0-9]+:[0-9]+\)/;
             var extractedTimerInfo = clickedTableCell.text().split("-")[1].match(REGEX_TIMER_DESCRIPTION);
-            console.log("extractedTimerInfo", extractedTimerInfo);
             var extractedTotalHours = extractedTimerInfo[1].split(":")[0];
             var extractedTotalMinutes = extractedTimerInfo[1].split(":")[1];
             var extractedTotalSeconds = extractedTimerInfo[1].split(":")[2];
             $("#main-timer").text(extractedTotalHours + ":" + extractedTotalMinutes + ":" + extractedTotalSeconds);
+            $("#main-timer").attr("data-timer-id", timerId);
         },
 
         _displayTimerDescriptionOnDeleteModalDialog: function (event) {
@@ -232,6 +242,12 @@ define([
             $("#timer-list").find("[data-timer-id=" + data._id + "]").find(".descriptionTimer").html(description);
         },
 
+        getTotalTimeInSeconds: function (totalTime) {
+            var REGEX_TOTAL_TIME = /([0-9]+)\:([0-9]+)\:([0-9]+)/;
+            var extractedTimerInfo = totalTime.match(REGEX_TOTAL_TIME);
+            return parseInt(extractedTimerInfo[3]) + parseInt(extractedTimerInfo[2] * 60) + parseInt(extractedTimerInfo[1] * 60 * 60);
+        },
+
         addTimerButton: function () {
             console.log("view addTimerButton");
 
@@ -288,8 +304,6 @@ define([
                 this._loadTotalTimer(event);
             }
 
-            console.log("view clickTable selectedTimer", selectedTimer);
-
             if (selectedTimer.clickedButton === "pauseTimer") {
                 this._disableTimerUI(event);
 
@@ -310,11 +324,56 @@ define([
         },
 
         startCountDownTimer: function () {
-            console.log("startCountDownTimer");
+            // console.log("startCountDownTimer");
+            var seconds = this.getTotalTimeInSeconds($("#main-timer").text());
+            this.countDownTimer.setConfig({
+                element: this.$mainTimer,
+                paused: false,
+                elapsed: seconds * 1000,
+                countingUp: false,
+                timeLimit: 0,
+                updateRate: 1000,
+                onTimeUp: function () {
+                    this.stop();
+                    $(this.element).html("Stopped");
+                },
+                onTimeUpdate: function () {
+                    var t = this.elapsed,
+                        h = ('0' + Math.floor(t / 3600000)).slice(-2),
+                        m = ('0' + Math.floor(t % 3600000 / 60000)).slice(-2),
+                        s = ('0' + Math.floor(t % 60000 / 1000)).slice(-2);
+
+                    var formattedTime = h + ':' + m + ':' + s;
+                    $(this.element).html(formattedTime);
+                }
+            });
+            this.countDownTimer.start();
+            this.$mainTimerStartButton.addClass("active");
+            this.$mainTimerStartButton.prop("disabled", true);
+
+            this.$mainTimerStopButton.removeClass("active");
+            this.$mainTimerStopButton.prop("disabled", false);
         },
 
         stopCountDownTimer: function () {
             console.log("stopCountDownTimer");
+            this.countDownTimer.stop();
+            var timerId = this.$mainTimer.attr("data-timer-id");
+            var totalTime = this.countDownTimer.parse();
+
+            this.modifyTimerEventForController.notify({
+                _id: timerId,
+                timer_total: {
+                    hours: totalTime.hours,
+                    minutes: totalTime.minutes,
+                    seconds: totalTime.seconds
+                }
+            });
+            this.$mainTimerStartButton.removeClass("active");
+            this.$mainTimerStartButton.prop("disabled", false);
+
+            this.$mainTimerStopButton.prop("disabled", true);
+            this.$mainTimerStopButton.addClass("active");
         },
 
         // Handlers From Event Dispatcher

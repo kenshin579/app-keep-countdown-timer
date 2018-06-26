@@ -1,107 +1,79 @@
 define([], function () {
     "use strict";
-    var CountDownTimer = function CountDownTimer(args) {
-        this.hours = args.hours;
-        this.minutes = args.minutes;
-        this.seconds = args.seconds;
-
-        this.paused = true;
-        this.timerInterval = null;
+    var CountDownTimer = function CountDownTimer() {
     };
 
-    CountDownTimer.prototype.print = function () {
-        console.log(this);
+    CountDownTimer.prototype.setConfig = function (config) {
+        console.log("setCountDownTimer");
+        config = config || {};
+        this.element = config.element || {};
+        this.previousTime = config.previousTime || new Date().getTime();
+        this.paused = config.paused && true;
+        this.elapsed = config.elapsed || 0;
+        this.countingUp = config.countingUp && true;
+        this.timeLimit = config.timeLimit || (this.countingUp ? 60 * 10 : 0);
+        this.updateRate = config.updateRate || 100;
+        this.onTimeUp = config.onTimeUp || function () {
+            this.stop();
+        };
+        this.onTimeUpdate = config.onTimeUpdate || function () {
+            console.log(this.elapsed)
+        };
     };
 
     CountDownTimer.prototype.start = function () {
-        // console.log("print", this);
-        // this.timerInterval =
+        // console.log("start");
+        // Unlock the timer
         this.paused = false;
-        console.log("new Date().getTime()", new Date().getTime());
-
+        // Update the current time
+        this.previousTime = new Date().getTime();
+        // Launch the counter
+        this.keepCounting();
     };
 
     CountDownTimer.prototype.stop = function () {
+        // console.log("stop");
         this.paused = true;
     };
 
     CountDownTimer.prototype.keepCounting = function () {
-        // console.log("print", this);
-        // this.timerInterval =
+        // Lock the timer if paused
+        if (this.paused) {
+            return true;
+        }
+        // Get the current time
+        var now = new Date().getTime();
+        // Calculate the time difference from last check and add/substract it to 'elapsed'
+        var diff = (now - this.previousTime);
+        if (!this.countingUp) {
+            diff = -diff;
+        }
+        this.elapsed = this.elapsed + diff;
+        // Update the time
+        this.previousTime = now;
+        // Execute the callback for the update
+        this.onTimeUpdate();
+        // If we hit the time limit, stop and execute the callback for time up
+        if ((this.elapsed >= this.timeLimit && this.countingUp) || (this.elapsed <= this.timeLimit && !this.countingUp)) {
+            this.stop();
+            this.onTimeUp();
+            return true;
+        }
+        // Execute that again in 'updateRate' milliseconds
+        var that = this;
+        setTimeout(function () {
+            that.keepCounting();
+        }, this.updateRate);
+    };
 
+    CountDownTimer.prototype.parse = function () {
+        var timerStr = this.element.text();
+        return {
+            hours: timerStr.split(":")[0],
+            minutes: timerStr.split(":")[1],
+            seconds: timerStr.split(":")[2]
+        }
     };
 
     return CountDownTimer;
 });
-
-//
-// function CountDownTimer(duration, granularity) {
-//     this.duration = duration;
-//     this.granularity = granularity || 1000;
-//     this.tickFtns = [];
-//     this.running = false;
-// }
-//
-// CountDownTimer.prototype.start = function() {
-//     if (this.running) {
-//         return;
-//     }
-//     this.running = true;
-//     var start = Date.now(),
-//         that = this,
-//         diff, obj;
-//
-//     (function timer() {
-//         diff = that.duration - (((Date.now() - start) / 1000) | 0);
-//
-//         if (diff > 0) {
-//             setTimeout(timer, that.granularity);
-//         } else {
-//             diff = 0;
-//             that.running = false;
-//         }
-//
-//         obj = CountDownTimer.parse(diff);
-//         that.tickFtns.forEach(function(ftn) {
-//             ftn.call(this, obj.minutes, obj.seconds);
-//         }, that);
-//     }());
-// };
-//
-// CountDownTimer.prototype.onTick = function(ftn) {
-//     if (typeof ftn === 'function') {
-//         this.tickFtns.push(ftn);
-//     }
-//     return this;
-// };
-//
-// CountDownTimer.prototype.expired = function() {
-//     return !this.running;
-// };
-//
-// CountDownTimer.parse = function(seconds) {
-//     return {
-//         'minutes': (seconds / 60) | 0,
-//         'seconds': (seconds % 60) | 0
-//     };
-// };
-
-// window.onload = function () {
-//     var display = document.querySelector('#time'),
-//         timer = new CountDownTimer(5),
-//         timeObj = CountDownTimer.parse(5);
-//
-//     format(timeObj.minutes, timeObj.seconds);
-//
-//     timer.onTick(format);
-//
-//     document.querySelector('button').addEventListener('click', function () {
-//         timer.start();
-//     });
-//
-//     function format(minutes, seconds) {
-//         minutes = minutes < 10 ? "0" + minutes : minutes;
-//         seconds = seconds < 10 ? "0" + seconds : seconds;
-//         display.textContent = minutes + ':' + seconds;
-//     }
-// };

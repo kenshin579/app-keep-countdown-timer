@@ -41,19 +41,30 @@ router.post('/add', function (req, res, next) {
 router.post('/modify/:id', function (req, res, next) {
     logger.info("req.params.id", req.params.id);
 
+    var modifyObj = {};
+    if (req.body.timer_description != null) {
+        modifyObj["timer_description"] = req.body.timer_description;
+    }
+    console.log("modifyObj1", modifyObj);
+    if (req.body.timer_interval != null) {
+        modifyObj["timer_interval"] = {
+            hours: req.body.timer_interval.hours,
+            minutes: req.body.timer_interval.minutes
+        };
+    }
+    console.log("modifyObj2", modifyObj);
+    if (req.body.timer_total != null) {
+        modifyObj["timer_total"] = {
+            hours: req.body.timer_total.hours,
+            minutes: req.body.timer_total.minutes,
+            seconds: req.body.timer_total.seconds
+        };
+    }
+
+    console.log("modifyObj3", modifyObj);
+
     var updateData = {
-        $set: {
-            timer_description: req.body.timer_description,
-            timer_interval: {
-                hours: req.body.timer_interval.hours,
-                minutes: req.body.timer_interval.minutes
-            },
-            timer_total: {
-                hours: req.body.timer_total.hours,
-                minutes: req.body.timer_total.minutes,
-                seconds: req.body.timer_total.seconds
-            }
-        }
+        $set: modifyObj
     };
 
     Timer.findByIdAndUpdate(req.params.id, updateData, function (err, timer) {

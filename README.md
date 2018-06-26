@@ -5,19 +5,6 @@ TODO LIST
   ㅁ.클라이언트 사이트에서 timer를 mongodb id를 사용하면 좋을 것 같음 
 - delete timer 구현중 (#1 첫번째를 구현한 다음에 진행이 필요함)  
 - MongoDB에 저장이후 저장 성공/실패 표시하도록 하기
-  
-
-controller
-- init() : 
-- listView  
- 
-models
-- 
-
-view
-- listView template로 데이터를 받아서 render을 함
-
-* :
 
 - fake data mongodb에 넣기
 ~~~
