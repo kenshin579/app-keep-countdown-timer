@@ -75,5 +75,9 @@ define([], function () {
         }
     };
 
+    CountDownTimer.prototype.getPauseStatus = function () {
+        return this.paused;
+    };
+
     return CountDownTimer;
 });

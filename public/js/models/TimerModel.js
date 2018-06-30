@@ -33,8 +33,9 @@ define([
         modifyTimer: function (timer) {
             console.log("model modifyTimer", timer);
             var i;
+            var index = 0;
             for (i = 0; i < this.timers.length; i++) {
-                if (this.timers[i]._id = timer._id) {
+                if (this.timers[i]._id === timer._id) {
                     if (timer.timer_description != null) {
                         this.timers[i].timer_description = timer.timer_description;
                     }
@@ -47,6 +48,7 @@ define([
                         this.timers[i].timer_total.minutes = timer.timer_total.minutes;
                         this.timers[i].timer_total.seconds = timer.timer_total.seconds;
                     }
+                    index = i;
                     break;
                 }
             }

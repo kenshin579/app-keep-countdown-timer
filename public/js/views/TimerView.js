@@ -51,6 +51,7 @@ define([
         },
 
         _initializeUI: function () {
+            this.$mainTimerStartButton.prop("disabled", true);
             this.$mainTimerStopButton.prop("disabled", true);
             return this;
         },
@@ -137,19 +138,36 @@ define([
             }
         },
 
+        /**
+         * time 선택하면 main-timer에 표시해줌
+         *
+         * @param event
+         * @private
+         */
         _loadTotalTimer: function (event) {
-            // console.log("view _loadTotalTimer");
+            console.log("view _loadTotalTimer");
             var timerId = $(event.target).closest("tr").attr("data-timer-id");
             var clickedTableCell = $(event.target).closest("td");
-            var REGEX_TIMER_DESCRIPTION = /\s+([0-9]+\:[0-9]+\:[0-9]+)\s+\([0-9]+:[0-9]+\)/;
+            var REGEX_TIMER_DESCRIPTION = /\s+([0-9]+)\:([0-9]+)\:([0-9]+)\s+\([0-9]+:[0-9]+\)/;
             var extractedTimerInfo = clickedTableCell.text().split("-")[1].match(REGEX_TIMER_DESCRIPTION);
-            var extractedTotalHours = extractedTimerInfo[1].split(":")[0];
-            var extractedTotalMinutes = extractedTimerInfo[1].split(":")[1];
-            var extractedTotalSeconds = extractedTimerInfo[1].split(":")[2];
-            $("#main-timer").text(extractedTotalHours + ":" + extractedTotalMinutes + ":" + extractedTotalSeconds);
-            $("#main-timer").attr("data-timer-id", timerId);
+            var extractedTotalHours = extractedTimerInfo[1];
+            var extractedTotalMinutes = extractedTimerInfo[2];
+            var extractedTotalSeconds = extractedTimerInfo[3];
+            this.$mainTimer.text(extractedTotalHours + ":" + extractedTotalMinutes + ":" + extractedTotalSeconds);
+            this.$mainTimer.attr("data-timer-id", timerId);
+
+            console.log("CountDownTimer.getPauseStatus: ", this.countDownTimer.getPauseStatus());
+
+            // start timer 버튼 활성화하기
+            this.$mainTimerStartButton.prop("disabled", false);
         },
 
+        /**
+         * delete modal 윈도우에 클릭한 정보를 표시해줌
+         *
+         * @param event
+         * @private
+         */
         _displayTimerDescriptionOnDeleteModalDialog: function (event) {
             console.log("view _displayTimerDescriptionOnDeleteModalDialog");
             var extractedTimerId = $(event.relatedTarget).parent().closest("tr").data().timerId;
@@ -158,18 +176,26 @@ define([
             $(event.target).find("#btnDeleteSubmitModal").attr("data-timer-id", extractedTimerId);
         },
 
+        /**
+         * 수정 modal 윈도우에 클릭한 정보를 표시해줌
+         *
+         * @param event
+         * @private
+         */
         _displayTimerDescriptionOnModifyModalDialog: function (event) {
             console.log("view _displayTimerDescriptionOnModifyModalDialog");
-            var REGEX_TIMER_DESCRIPTION = /\s+([0-9]+\:[0-9]+\:[0-9]+)\s+\(([0-9]+:[0-9]+)\)/;
+            var REGEX_TIMER_DESCRIPTION = /\s+([0-9]+)\:([0-9]+)\:([0-9]+)\s+\(([0-9]+):([0-9]+)\)/;
             var extractedTimerId = $(event.relatedTarget).parent().closest("tr").data().timerId;
             var extractedTimerAndDescription = $(event.relatedTarget).parent().siblings(".descriptionTimer").text().split("-");
             var extractedTimerDescription = extractedTimerAndDescription[0].replace(/ +$/, "");
             var extractedTimerInfo = extractedTimerAndDescription[1].match(REGEX_TIMER_DESCRIPTION);
-            var extractedTotalHours = extractedTimerInfo[1].split(":")[0];
-            var extractedTotalMinutes = extractedTimerInfo[1].split(":")[1];
-            var extractedTotalSeconds = extractedTimerInfo[1].split(":")[2];
-            var extractedIntervalHours = extractedTimerInfo[2].split(":")[0];
-            var extractedIntervalMinutes = extractedTimerInfo[2].split(":")[1];
+
+            var extractedTotalHours = extractedTimerInfo[1];
+            var extractedTotalMinutes = extractedTimerInfo[2];
+            var extractedTotalSeconds = extractedTimerInfo[3];
+
+            var extractedIntervalHours = extractedTimerInfo[4];
+            var extractedIntervalMinutes = extractedTimerInfo[5];
             $(event.target).find("#modifyTimerDescription").val(extractedTimerDescription);
             $(event.target).find("#modifyTimerHours").val(extractedIntervalHours);
             $(event.target).find("#modifyTimerMinutes").val(extractedIntervalMinutes);
@@ -181,7 +207,7 @@ define([
             $(event.target).find("#btnModifySubmitModal").attr("data-timer-id", extractedTimerId);
         },
 
-        _enableTimerUI: function (event) {
+        _enablePlayPauseTimerUI: function (event) {
             if ($(event.target).is("button")) {
                 $(event.target).addClass("active");
             } else {
@@ -190,7 +216,7 @@ define([
             $(event.target).closest("td").next().find("button").removeClass("active");
         },
 
-        _disableTimerUI: function (event) {
+        _disablePlayPauseTimerUI: function (event) {
             //enable pause
             if ($(event.target).is("button")) {
                 $(event.target).addClass("active");
@@ -229,12 +255,24 @@ define([
             }
         },
 
+        /**
+         * 목록에서 제거함
+         *
+         * @param data
+         * @private
+         */
         _deleteTimersOnView: function (data) {
             console.log("view _deleteTimersOnView data", data);
             console.log("timers", this.model.timers);
             $("#timer-list").find("[data-timer-id=" + data._id + "]").remove();
         },
 
+        /**
+         * 목록에서 수정한 정보를 업데이트함
+         *
+         * @param data
+         * @private
+         */
         _modifyTimersOnView: function (data) {
             console.log("view _modifyTimersOnView data", data);
             console.log("timers", this.model.timers);
@@ -242,15 +280,24 @@ define([
             $("#timer-list").find("[data-timer-id=" + data._id + "]").find(".descriptionTimer").html(description);
         },
 
+        /**
+         * hours, minutes, seconds 합쳐서 seconds으로
+         *
+         * @param totalTime
+         * @returns {number}
+         */
         getTotalTimeInSeconds: function (totalTime) {
             var REGEX_TOTAL_TIME = /([0-9]+)\:([0-9]+)\:([0-9]+)/;
             var extractedTimerInfo = totalTime.match(REGEX_TOTAL_TIME);
-            return parseInt(extractedTimerInfo[3]) + parseInt(extractedTimerInfo[2] * 60) + parseInt(extractedTimerInfo[1] * 60 * 60);
+            if (extractedTimerInfo) {
+                return parseInt(extractedTimerInfo[3]) + parseInt(extractedTimerInfo[2] * 60) + parseInt(extractedTimerInfo[1] * 60 * 60);
+            }
         },
 
+        /**
+         * 추가 버튼 클릭시 입력한 정보를 conrtroller에 넘김
+         */
         addTimerButton: function () {
-            console.log("view addTimerButton");
-
             this.addTimerEventForController.notify({
                 timer_description: $("#addTimerDescription").val(),
                 timer_interval: {
@@ -268,7 +315,7 @@ define([
         },
 
         /**
-         * 선태한 timer를 삭제함
+         * 삭제 버튼 클릭시 삭제할 정보를 conrtroller에 넘김
          */
         deleteTimerButton: function (event) {
             var timerId = $(event.target).data().timerId;
@@ -277,6 +324,9 @@ define([
             });
         },
 
+        /**
+         * 수정 버튼 클륵시 수정할 정보를 conrtroller에 넘김
+         */
         modifyTimerButton: function () {
             var timerId = $(event.target).data().timerId;
             console.log("view modifyTimerButton timerId: ", timerId);
@@ -296,16 +346,24 @@ define([
             });
         },
 
+        /**
+         * table안에 Play, Pause, Timer을 클랙했을 때에 대한 처리를 담당함
+         *
+         * @param event
+         */
         clickTable: function (event) {
-            console.log("event", event);
             var selectedTimer = this._identifySelectedTimerAndButton(event);
-            console.log("selectedTimer", selectedTimer);
+
             if (!selectedTimer._id) {
-                this._loadTotalTimer(event);
+                console.log("status", this.countDownTimer.getPauseStatus());
+                if (this.countDownTimer.getPauseStatus() === undefined
+                    || this.countDownTimer.getPauseStatus()) {
+                    this._loadTotalTimer(event);
+                }
             }
 
             if (selectedTimer.clickedButton === "pauseTimer") {
-                this._disableTimerUI(event);
+                this._disablePlayPauseTimerUI(event);
 
                 this.updateTimerEventForController.notify({
                     _id: selectedTimer._id,
@@ -314,7 +372,7 @@ define([
             }
 
             if (selectedTimer.clickedButton === "playTimer") {
-                this._enableTimerUI(event);
+                this._enablePlayPauseTimerUI(event);
                 this.updateTimerEventForController.notify({
                     _id: selectedTimer._id,
                     timer_status: true
@@ -323,42 +381,58 @@ define([
 
         },
 
+        /**
+         * timer를 설정하고 시작함
+         *
+         */
         startCountDownTimer: function () {
             // console.log("startCountDownTimer");
-            var seconds = this.getTotalTimeInSeconds($("#main-timer").text());
-            this.countDownTimer.setConfig({
-                element: this.$mainTimer,
-                paused: false,
-                elapsed: seconds * 1000,
-                countingUp: false,
-                timeLimit: 0,
-                updateRate: 1000,
-                onTimeUp: function () {
-                    this.stop();
-                    $(this.element).html("Stopped");
-                },
-                onTimeUpdate: function () {
-                    var t = this.elapsed,
-                        h = ('0' + Math.floor(t / 3600000)).slice(-2),
-                        m = ('0' + Math.floor(t % 3600000 / 60000)).slice(-2),
-                        s = ('0' + Math.floor(t % 60000 / 1000)).slice(-2);
+            console.log("this.countDownTimer.getPauseStatus()", this.countDownTimer.getPauseStatus());
+            if (this.countDownTimer.getPauseStatus() === undefined
+                || this.countDownTimer.getPauseStatus()) {
+                var seconds = this.getTotalTimeInSeconds($("#main-timer").text());
+                this.countDownTimer.setConfig({
+                    element: this.$mainTimer,
+                    paused: false,
+                    elapsed: seconds * 1000,
+                    countingUp: false,
+                    timeLimit: 0,
+                    updateRate: 1000,
+                    onTimeUp: function () {
+                        this.stop();
+                        $(this.element).html("Stopped");
+                    },
+                    onTimeUpdate: function () {
+                        var t = this.elapsed,
+                            h = ('0' + Math.floor(t / 3600000)).slice(-2),
+                            m = ('0' + Math.floor(t % 3600000 / 60000)).slice(-2),
+                            s = ('0' + Math.floor(t % 60000 / 1000)).slice(-2);
 
-                    var formattedTime = h + ':' + m + ':' + s;
-                    $(this.element).html(formattedTime);
-                }
-            });
-            this.countDownTimer.start();
-            this.$mainTimerStartButton.addClass("active");
-            this.$mainTimerStartButton.prop("disabled", true);
+                        var formattedTime = h + ':' + m + ':' + s;
+                        $(this.element).html(formattedTime);
+                    }
+                });
+                this.countDownTimer.start();
+                this.$mainTimerStartButton.addClass("active");
+                this.$mainTimerStartButton.prop("disabled", true);
 
-            this.$mainTimerStopButton.removeClass("active");
-            this.$mainTimerStopButton.prop("disabled", false);
+                this.$mainTimerStopButton.removeClass("active");
+                this.$mainTimerStopButton.prop("disabled", false);
+
+                console.log("id", this.$mainTimer.attr("data-timer-id"));
+                $("#timer-list").find("tr[data-timer-id=" + this.$mainTimer.attr("data-timer-id") + "]").css("background-color", "#fe7f26")
+            }
         },
 
+        /**
+         * timer를 멈춤
+         */
         stopCountDownTimer: function () {
             console.log("stopCountDownTimer");
             this.countDownTimer.stop();
             var timerId = this.$mainTimer.attr("data-timer-id");
+            console.log("timerId", timerId);
+
             var totalTime = this.countDownTimer.parse();
 
             this.modifyTimerEventForController.notify({
@@ -374,24 +448,49 @@ define([
 
             this.$mainTimerStopButton.prop("disabled", true);
             this.$mainTimerStopButton.addClass("active");
+
+            $("#timer-list").find("tr[data-timer-id=" + timerId + "]").css("background-color", "white")
+
+            this.$mainTimer.html("Select time");
         },
 
         // Handlers From Event Dispatcher
+        /**
+         * 추가된 timer는 controller, model 저장후 목록에 추가됨
+         *
+         * @param sender
+         * @param args
+         */
         addTimer: function (sender, args) {
             console.log("viewer addTimer args", args);
             this._addAndListTimersOnView(args);
         },
 
+        /**
+         * 추가된 timer는 controller, model 저장후 목록에서 삭제됨
+         *
+         * @param sender
+         * @param args
+         */
         deleteTimer: function (sender, args) {
             console.log("viewer deleteTimer args", args);
             this._deleteTimersOnView(args);
         },
 
+        /**
+         * 추가된 timer는 controller, model 저장후 목록에서 수정됨
+         *
+         * @param sender
+         * @param args
+         */
         modifyTimer: function (sender, args) {
             console.log("viewer modifyTimer args", args);
             this._modifyTimersOnView(args);
         },
 
+        /**
+         * 목록을 만들어서 보여줌
+         */
         listTimers: function () {
             this._addAndListTimersOnView();
         }

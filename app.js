@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
 var logger = require('./config/logger');
 
+var schedule = require('node-schedule');
+
 // Configuring the database
 var mongoose = require('mongoose');
 var dbConfig = require('./config/database.config.js');
@@ -17,15 +19,14 @@ app.set('view engine', 'ejs');
 
 var isProduction = process.env.NODE_ENV === 'production';
 
-// if (isProduction) {
-//     mongoose.connect(dbConfig.url);
-// } else {
-//     mongoose.connect(dbConfig.url);
-//     mongoose.set('debug', true);
-// }
+if (isProduction) {
+    mongoose.connect(dbConfig.url);
+} else {
+    mongoose.connect(dbConfig.url);
+    mongoose.set('debug', true);
+}
 
 mongoose.connect(dbConfig.url);
-mongoose.set('debug', true);
 
 var db = mongoose.connection;
 db.on('error', console.error);
@@ -36,6 +37,8 @@ db.once('open', function () {
 
 // DEFINE MODEL
 var TimerDb = require('./models/timer');
+
+var Timer = mongoose.model('timer');
 
 app.use(morgan('dev'));
 app.use(express.json());
@@ -61,5 +64,35 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+
+var updateMongoDB = schedule.scheduleJob('*/1 * * * *', function () {
+    logger.info("increase time interval");
+
+
+});
+
+// var updateData = [];
+//
+// Timer.find(function (err, timers) {
+//     if (err) {
+//         logger.error(err);
+//         return;
+//     }
+//
+//     timers.forEach(function (data) {
+//         updateData.push({
+//             _id: data._id,
+//             timer_total: {
+//                 hours: data.timer_total.hours = data.timer_total.hours + data.timer_interval.hours,
+//                 minutes: data.timer_total.minutes = data.timer_total.minutes + data.timer_interval.minutes,
+//                 seconds: data.timer_total.seconds
+//             }
+//         });
+//     });
+//     console.log("updateData", updateData)
+// });
+
+//todo: mongodb에서 get해서 total_timer 업데이트해야 함
+
 
 module.exports = app;
