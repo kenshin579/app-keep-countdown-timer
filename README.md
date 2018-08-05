@@ -56,6 +56,6 @@ $ npm start
 ~~~
 
 <a href="/images/npm_startpng" target="_blank">
-<img src="/images/npm_start.png" width="300" /></a> 
+<img src="/images/npm_start.png" width="500" /></a> 
 
 http://localhost:3000 에 접속한다. 
