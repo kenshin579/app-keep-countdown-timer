@@ -17,7 +17,14 @@ Keep Countdown timer
 
 
 <a href="/images/main.png" target="_blank">
-<img src="/images/main.png" width="200" /></a> 
+<img src="/images/main.png" width="300" /></a>
+
+<a href="/images/timer_start.png" target="_blank">
+<img src="/images/timer_start.png" width="300" /></a>
+
+<a href="/images/timer_add.png" target="_blank">
+<img src="/images/timer_add.png" width="300" /></a>
+ 
 
 ## 추가 작업목록 - 2차 (누구나 참여 가능합니다)
 - [ ] 다른 web framework(ex. Vue.js)를 이용해서 재작성
@@ -49,12 +56,6 @@ $ npm start
 ~~~
 
 <a href="/images/npm_startpng" target="_blank">
-<img src="/images/npm_start.png" width="200" /></a> 
+<img src="/images/npm_start.png" width="300" /></a> 
 
-http://localhost:3000에 접속한다. 
-
-<a href="/images/timer_add.png" target="_blank">
-<img src="/images/timer_add.png" width="200" /></a>
-
-<a href="/images/timer_start.png" target="_blank">
-<img src="/images/timer_start.png" width="200" /></a>
+http://localhost:3000 에 접속한다. 
