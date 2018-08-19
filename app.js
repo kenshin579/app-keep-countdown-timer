@@ -6,6 +6,7 @@ var morgan = require('morgan');
 var logger = require('./config/logger');
 
 var schedule = require('node-schedule');
+var PORT = process.env.PORT || 5000;
 
 // Configuring the database
 var mongoose = require('mongoose');
@@ -23,7 +24,7 @@ if (isProduction) {
     mongoose.connect(dbConfig.url);
 } else {
     mongoose.connect(dbConfig.url);
-    mongoose.set('debug', true);
+    // mongoose.set('debug', true);
 }
 
 mongoose.connect(dbConfig.url);
@@ -65,11 +66,19 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
-var updateMongoDB = schedule.scheduleJob('*/1 * * * *', function () {
-    logger.info("increase time interval");
-
-
+app.listen(PORT, function() {
+    console.log('Listening on ', PORT)
 });
+
+// //todo: mongodb에서 get해서 total_timer 업데이트해야 함
+// var updateMongoDB = schedule.scheduleJob('*/1 * * * *', function () {
+//     logger.info("increase time interval");
+//
+// });
+
+// https://spion.github.io/posts/why-i-am-switching-to-promises.html
+// https://stackoverflow.com/questions/9022099/how-to-use-mongoose-promise-mongo
+// https://blog.revathskumar.com/2015/07/using-promises-with-mongoosejs.html
 
 // var updateData = [];
 //
@@ -91,8 +100,5 @@ var updateMongoDB = schedule.scheduleJob('*/1 * * * *', function () {
 //     });
 //     console.log("updateData", updateData)
 // });
-
-//todo: mongodb에서 get해서 total_timer 업데이트해야 함
-
 
 module.exports = app;

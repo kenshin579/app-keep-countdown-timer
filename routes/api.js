@@ -45,14 +45,12 @@ router.post('/modify/:id', function (req, res, next) {
     if (req.body.timer_description != null) {
         modifyObj["timer_description"] = req.body.timer_description;
     }
-    console.log("modifyObj1", modifyObj);
     if (req.body.timer_interval != null) {
         modifyObj["timer_interval"] = {
             hours: req.body.timer_interval.hours,
             minutes: req.body.timer_interval.minutes
         };
     }
-    console.log("modifyObj2", modifyObj);
     if (req.body.timer_total != null) {
         modifyObj["timer_total"] = {
             hours: req.body.timer_total.hours,
@@ -60,8 +58,6 @@ router.post('/modify/:id', function (req, res, next) {
             seconds: req.body.timer_total.seconds
         };
     }
-
-    console.log("modifyObj3", modifyObj);
 
     var updateData = {
         $set: modifyObj
