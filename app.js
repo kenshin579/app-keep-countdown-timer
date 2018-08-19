@@ -24,7 +24,7 @@ if (isProduction) {
     mongoose.connect(dbConfig.url);
 } else {
     mongoose.connect(dbConfig.url);
-    // mongoose.set('debug', true);
+    mongoose.set('debug', true);
 }
 
 mongoose.connect(dbConfig.url);
